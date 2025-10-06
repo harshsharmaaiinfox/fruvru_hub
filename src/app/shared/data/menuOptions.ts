@@ -30,7 +30,7 @@ export const ThemeMenuOptions: any[] = [
     // },
     {
         "id": 162,
-        "title": "Gent",
+        "title": "Menswear",
         "sort": null,
         "link_type": "link",
         "mega_menu": 0,
@@ -55,7 +55,7 @@ export const ThemeMenuOptions: any[] = [
     },
     {
         "id": 163,
-        "title": "Lady",
+        "title": "Womenswear",
         "sort": null,
         "link_type": "link",
         "mega_menu": 0,
@@ -81,7 +81,7 @@ export const ThemeMenuOptions: any[] = [
    
     {
         "id": 45,
-        "title": "Gym",
+        "title": "Active Life",
         "sort": null,
         "link_type": "link",
         "mega_menu": 1,
