@@ -1,0 +1,122 @@
+<div class="modern-footer">
+    <!-- Main Footer Content -->
+    <div class="footer-main-content">
+        <div class="container-fluid-lg">
+            <div class="row g-4">
+                
+                <!-- Newsletter Signup Section -->
+                <div class="col-xl-4 col-lg-5 col-md-6">
+                    <div class="newsletter-section">
+                        <h2 class="newsletter-title">Don't Miss Out</h2>
+                        <p class="newsletter-description">Sign up for the latest fashion news, product updates and exclusive offers</p>
+                        
+                        <form class="newsletter-form" [formGroup]="subscribeForm" (ngSubmit)="onSubscribe()">
+                            <div class="form-group">
+                                <label for="email">EMAIL ADDRESS*</label>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    formControlName="email"
+                                    placeholder="Enter Your Email Address"
+                                    [class.is-invalid]="submitted && emailControl?.invalid"
+                                >
+                                <div class="error-message" *ngIf="submitted && emailControl?.invalid && emailControl?.touched">
+                                    <span *ngIf="emailControl?.errors?.['required']">Email is required</span>
+                                    <span *ngIf="emailControl?.errors?.['pattern']">Please enter a valid email</span>
+                                    <span *ngIf="emailControl?.errors?.['invalidDomain']">Please use a valid email domain</span>
+                                </div>
+                                <div class="success-message" *ngIf="subscribeSuccess">
+                                    Thank you for subscribing!
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="subscribe-btn" [disabled]="submitted">
+                                {{ submitted ? 'SIGNING UP...' : 'SIGN UP' }}
+                            </button>
+                            
+                            
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Navigation Columns -->
+                <div class="col-xl-8 col-lg-7 col-md-6">
+                    <div class="row">
+                        <!-- Useful Links Column -->
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="footer-column">
+                                <h4 class="column-title">USEFUL LINKS</h4>
+                                <ul class="footer-links">
+                                    <li><a href="/aboutus">About Us</a></li>
+                                    <li><a href="/Contact-Us">Contact Us</a></li>
+                                    <li><a href="/shipping-delivery">Shipping + Delivery</a></li>
+                                    <li><a href="/return-exchange">Return + Exchange</a></li>
+                                    <li><a href="/Refund-and-Cancellation-Policy">Refund Policy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Help Center Column -->
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="footer-column">
+                                <h4 class="column-title">HELP CENTER</h4>
+                                <ul class="footer-links">
+                                    <li><a href="/privacy-policy">Privacy Policy</a></li>
+                                    <li><a href="/term-condition">Terms & Conditions</a></li>                                   
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Contact Column -->
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="footer-column">
+                                <h4 class="column-title">CONTACT</h4>
+                                <div class="contact-info">
+                                    <p class="contact-item">
+                                        <i class="ri-map-pin-line"></i>
+                                        Office No 253, Plot No 11, 2nd Floor<br>
+                                        Vardhaman Market Plaza, Pitampura<br>
+                                        Rani Bagh, Delhi, 110034
+                                    </p>
+                                    <p class="contact-item">
+                                        <i class="ri-phone-line"></i>
+                                        <a href="tel:+911234567890">+91 12345 67890</a>
+                                    </p>
+                                    <p class="contact-item">
+                                        <i class="ri-mail-line"></i>
+                                        <a href="mailto:info&#64;frubruhub.com">info&#64;frubruhub.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <!-- Bottom Footer Bar -->
+    <div class="footer-bottom">
+        <div class="container-fluid-lg">
+            <div class="footer-bottom-content">
+                <div class="footer-bottom-links">
+                    <a href="/privacy-policy">PRIVACY</a>
+                    <a href="/term-condition">TERMS</a>
+                    <a href="/shipping-delivery">SHIPPING</a>
+                    <a href="/return-exchange">RETURNS</a>
+                    <a href="/Contact-Us">CONTACT</a>
+                </div>
+                
+                <div class="footer-bottom-right">
+                    <span class="copyright">©{{ currentYear }} Frubru Hub</span>
+                    <a href="#" class="back-to-top" (click)="scrollToTop()">
+                        BACK TO TOP <i class="ri-arrow-up-line"></i>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

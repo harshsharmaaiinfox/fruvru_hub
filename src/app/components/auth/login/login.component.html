@@ -1,0 +1,65 @@
+<app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="section-b-space">
+    <div class="container-fluid-lg">
+        <div class="row g-0 align-items-stretch shadow-sm rounded overflow-hidden">
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="h-100 w-100" style="background: url('assets/images/login-main.png') center/cover no-repeat; min-height: 420px;"></div>
+            </div>
+            <div class="col-12 col-lg-7 bg-white">
+                <div class="p-4 p-md-5 h-100 d-flex flex-column justify-content-center">
+                    <app-alert></app-alert>
+                    <div class="mb-3 text-center text-lg-start">
+                        <h3 class="mb-1">{{ 'Welcome To' | translate }} {{ (setting$ | async)?.general?.site_name }}</h3>
+                        <p class="text-muted mb-0">{{ 'Login Your Account' | translate }}</p>
+                    </div>
+                    <form class="row g-3" [formGroup]="form" (ngSubmit)="submit()">
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="email" formControlName="email" placeholder="{{ 'Email Address' | translate}}">
+                                <label for="email">{{ 'Email Address' | translate}}</label>
+                                <div *ngIf="form.controls['email'].touched && form.controls['email'].errors?.['required']" class="invalid-feedback">
+                                    {{ 'Email Is Required' | translate }}
+                                </div>
+                                <div *ngIf="form.controls['email'].touched && form.controls['email'].errors?.['email']" class="invalid-feedback">
+                                    {{ 'Invalid Email' | translate }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="password" formControlName="password" placeholder="{{ 'Password' | translate }}">
+                                <label for="password">{{ 'Password' | translate }}</label>
+                                <div *ngIf="form.controls['password'].touched && form.controls['password'].errors?.['required']" class="invalid-feedback">
+                                    {{ 'Password Is Required' | translate }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" *ngIf="reCaptcha">
+                            <re-captcha formControlName="recaptcha"> </re-captcha>
+                            <div *ngIf="form.controls['recaptcha']?.touched && form.controls['recaptcha']?.errors?.['required']" class="invalid-feedback">
+                                {{ 'ReCaptcha is Required' | translate }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-between align-items-center">
+                            <div class="form-check m-0">
+                                <input class="checkbox_animated check-box" type="checkbox" id="remeberme">
+                                <label class="form-check-label" for="remeberme">{{ 'Remember Me' | translate }}</label>
+                            </div>
+                            <a [routerLink]="['/auth/forgot-password']" class="forgot-password">{{ 'Forgot Password' | translate }}?</a>
+                        </div>
+                        <div class="col-12">
+                            <app-button [id]="'login_btn'" [class]="'btn btn-animation justify-content-center w-100 disabled'">{{ 'Login' | translate }}</app-button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-4">
+                        <span class="text-muted">{{ 'OR'| translate}}</span>
+                    </div>
+                    <div class="text-center mt-3">
+                        <span>{{ "Dont Have An Account"| translate}}?</span>
+                        <a [routerLink]="['/auth/register']" class="ms-1">{{ 'Sign up'| translate}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

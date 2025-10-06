@@ -1,0 +1,296 @@
+<div>
+  <!-- Home section start -->
+  <section class="home-section-2 home-section-small section-b-space"
+      [ngStyle]="{'background-image': 'url(' + data?.content?.home_banner?.bg_image_url+ ')'}"
+      *ngIf="data?.content?.home_banner">
+      <app-theme-home-banner [theme]="'rome'" [data]="data?.content?.home_banner"></app-theme-home-banner>
+  </section>
+  <!-- Home Section End -->
+
+  <!-- Category Section Start -->
+  <!-- <section class="category-section-2" *ngIf="data?.content?.categories_image_list?.status">
+    <div class="container-fluid-lg">
+      <app-title
+        [title]="data?.content?.categories_image_list?.title"
+        [style]="'simple'">
+      </app-title>
+      <div class="row">
+        <div class="col-10 m-auto">
+          <app-theme-categories
+            [style]="'horizontal'"
+            [theme]="'rome'"
+            [categoryIds]="data?.content?.categories_image_list?.category_ids || []"
+            [sliderOption]="categorySlider">
+          </app-theme-categories>
+        </div>
+      </div>
+    </div>
+  </section> -->
+  <!-- Category Section End -->
+
+
+  <!-- My Cystom Section -->
+
+  
+
+  
+<section class="overflow-hidden my-5">
+  <div class="card-section container-fluid-lg">
+		<div class="col-xxl-12 text-center">
+			<h3>
+				<i class="ri-fire-line me-2" aria-hidden="true"></i>
+				Latest Fashion Trends
+				<i class="ri-star-line ms-2" aria-hidden="true"></i>
+			</h3>
+			<p class="pt-2">Discover the freshest drops in women’s and men’s fashion — trending silhouettes, statement layers, and everyday essentials reimagined. Explore curated edits inspired by streetwear and runway moments, crafted for comfort, quality, and bold style. Update your wardrobe with what’s hot right now.</p>
+		</div>
+		<div class="row g-1 mt-2">
+		<div class="col-12 col-sm-6 col-lg-3">
+			<div class="ratio ratio-1x1 rounded overflow-hidden">
+					<video #autoVid class="w-100 h-100 object-cover" autoplay muted loop playsinline preload="metadata">
+            <source src="assets/images/vid-1.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+		<div class="col-12 col-sm-6 col-lg-3">
+			<div class="ratio ratio-1x1 rounded overflow-hidden">
+					<video #autoVid class="w-100 h-100 object-cover" autoplay muted loop playsinline preload="metadata">
+            <source src="assets/images/vid-2.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+		<div class="col-12 col-sm-6 col-lg-3">
+			<div class="ratio ratio-1x1 rounded overflow-hidden">
+					<video #autoVid class="w-100 h-100 object-cover" autoplay muted loop playsinline preload="metadata">
+            <source src="assets/images/vid-3.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+		<div class="col-12 col-sm-6 col-lg-3">
+			<div class="ratio ratio-1x1 rounded overflow-hidden">
+					<video #autoVid class="w-100 h-100 object-cover" autoplay muted loop playsinline preload="metadata">
+            <source src="assets/images/vid-4.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- My Cystom Section End -->
+
+
+
+
+
+
+
+  <!-- Value Section Start -->
+  <section class="overflow-hidden my-5" *ngIf="data?.content?.value_banners?.status">
+    <app-title
+      [title]="data?.content?.value_banners?.title"
+      [class]="'container-fluid-lg'"
+      [style]="'simple'">
+    </app-title>
+    <div class="row">
+      <div class="col-12">
+        <app-theme-banner [style]="'horizontal'" [banners]="data?.content?.value_banners?.banners"></app-theme-banner>
+      </div>
+    </div>
+  </section>
+  <!-- Value Section End -->
+
+  <!-- Product Section Start -->
+  <section class="product-section" *ngIf="data?.content?.categories_products?.status && data?.content?.categories_products?.category_ids?.length">
+    <app-category-product-filter [priceRange]="'300-1010'" [data]="data?.content" [grid]="showProductBox"></app-category-product-filter>
+  </section>
+  <!-- Product Section End -->
+
+   <!-- Top Seller start -->
+   <ng-container *ngIf="data?.content?.seller?.status">
+     <section>
+       <div class="container-fluid-lg">
+        <app-title 
+        [title]="data?.content?.seller?.title" 
+        [style]="'simple'">
+        </app-title>
+        <app-top-seller [sellerIds]="data?.content?.seller?.store_ids || []"></app-top-seller>
+       </div>
+     </section>
+   </ng-container>
+   <!-- Top Seller End -->
+
+  <!-- Banner Section Start -->
+  <section class="banner-section my-5" *ngIf="data?.content?.two_column_banners?.status">
+    <div class="container-fluid-lg">
+      <div class="row gy-xl-0 gy-3">
+        <div class="col-lg-6">
+          <app-image-link
+            [image]="data?.content?.two_column_banners?.banner_1"
+            [class]="'banner-contain-3 hover-effect'"
+            [bgImage]="false">
+          </app-image-link>
+        </div>
+        <div class="col-lg-6">
+          <app-image-link
+            [image]="data?.content?.two_column_banners?.banner_2"
+            [class]="'banner-contain-3 hover-effect'"
+            [bgImage]="false">
+          </app-image-link>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Banner Section End -->
+
+  <!-- <section class="top-selling-section border-box section-b-space" *ngIf="data?.content?.slider_products?.status">
+    <div class="container-fluid-lg">
+      <app-four-column-product [data]="data?.content?.slider_products"></app-four-column-product>
+    </div>
+  </section> -->
+
+
+  <!-- Instant Saree Section Start -->
+  <section class="instant-saree-section section-b-space my-5">
+    <div class="container-fluid-lg">
+      <div class="row align-items-center gy-4">
+        <div class="col-12 col-lg-7">
+          <div class="instant-grid">
+            <div class="instant-grid-left">
+              <video #autoVid class="w-100 h-100 object-cover" autoplay muted loop playsinline preload="metadata">
+                <source src="assets/images/active-vid.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="instant-grid-right">
+              <div class="instant-right-top">
+                <img src="assets/images/active-1.jpg" alt="Active Wear 1" class="img-fluid w-100 h-100 object-cover">
+              </div>
+              <div class="instant-right-bottom">
+                <img src="assets/images/active-2.jpg" alt="Active Wear 2" class="img-fluid w-100 h-100 object-cover">
+                <img src="assets/images/active-3.jpg" alt="Active Wear 3" class="img-fluid w-100 h-100 object-cover">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-5">
+          <div class="instant-copy text-center">
+            <div class="eyebrow">Introducing</div>
+            <h2 class="display-title">ACTIVE WEAR</h2>
+            <a href="/collections?category=gym&sortBy=asc" class="btn btn-dark px-4 py-2 mt-3">SHOP ACTIVEWEAR</a>
+            <p class="small mt-3 mb-0">Performance-ready essentials — breathable, stretchy and sweat-wicking. Move better.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Instant Saree Section End -->
+
+
+  <!-- Product Section Start -->
+  <section class="product-section"
+  *ngIf="data?.content?.products_list_1?.status">
+  <div class="container-fluid-lg">
+  <app-title
+    [title]="'Fusion Picks'"
+    [style]="'simple'">
+  </app-title>
+    <app-theme-product
+      class="romehomepageproduct"
+      [productIds]="data?.content?.products_list_1?.product_ids || []"
+      [style]="'horizontal'"
+      [slider]="true"
+      [productStyle]="'product-standard'"
+      [boxClass]="'product-box-bg'"
+      [sliderOption]="productSlider6ItemMargin">
+    </app-theme-product>
+  </div>
+</section>
+<!-- Product Section End -->
+
+
+
+   <!-- Fashion Editorial Text Section Start -->
+  <section class="fashion-highlights-section py-5 my-5">
+    <div class="container-fluid-lg">
+     <div class="row justify-content-center text-center">
+       <div class="col-12 col-lg-8">
+         <h3 class="mb-2">Editor’s Highlights</h3>
+         <p class="lead mb-4">Quick trends and picks you’ll love. Update your look in minutes.</p>
+       </div>
+     </div>
+     <div class="row g-3 g-lg-4 text-center">
+       <div class="col-12 col-md-4">
+         <div class="highlight-card p-4 h-100">
+           <i class="ri-sparkling-line highlight-icon" aria-hidden="true"></i>
+           <h5 class="mt-2 mb-1">Fresh Drops</h5>
+           <p class="mb-0 small">New arrivals weekly across men, women and athleisure.</p>
+         </div>
+       </div>
+       <div class="col-12 col-md-4">
+         <div class="highlight-card p-4 h-100">
+           <i class="ri-shirt-line highlight-icon" aria-hidden="true"></i>
+           <h5 class="mt-2 mb-1">Premium Comfort</h5>
+           <p class="mb-0 small">Soft, breathable fabrics designed to move with you.</p>
+         </div>
+       </div>
+       <div class="col-12 col-md-4">
+         <div class="highlight-card p-4 h-100">
+           <i class="ri-exchange-funds-line highlight-icon" aria-hidden="true"></i>
+           <h5 class="mt-2 mb-1">Easy Returns</h5>
+           <p class="mb-0 small">Hassle‑free exchanges so you shop with confidence.</p>
+         </div>
+       </div>
+      </div>
+    </div>
+  </section>
+  <!-- Fashion Editorial Text Section End -->
+
+
+  <!-- Banner Section Start -->
+  <div class="container-fluid-lg my-5" *ngIf="data?.content?.full_width_banner?.status">
+    <div class="ratio_12" *ngIf="data?.content?.full_width_banner?.status">
+      <app-theme-banner [banners]="data?.content?.full_width_banner" [style]="'full_width'"></app-theme-banner>
+    </div>
+  </div>
+  <!-- Banner Section End -->
+
+
+
+
+  <!-- custom section start -->
+
+
+
+<!-- custom section end  -->
+
+
+  <!-- Blog Section Start -->
+  <section
+    *ngIf="data?.content?.featured_blogs?.status">
+    <div class="container-fluid-lg">
+      <app-title
+        [title]="data?.content?.featured_blogs?.title"
+        [style]="'simple'">
+      </app-title>
+      <app-blog
+        [sliderOption]="customOptionsItem4"
+        [blogIds]="data?.content?.featured_blogs?.blog_ids || []">
+      </app-blog>
+    </div>
+  </section>
+  <!-- Blog Section End -->
+
+  <!-- Brand Section start -->
+  <section class="brand-effect" *ngIf="data?.content?.brands?.brand_ids && data?.content?.brands?.status">
+    <div class="container-fluid-lg">
+      <app-brand [brandIds]="data?.content?.brands?.brand_ids || []"></app-brand>
+    </div>
+  </section>
+  <!-- Brand Section end -->
+
+  <!-- Newsletter Section Start -->
+  <section class="newsletter-section-2 section-b-space" *ngIf="data?.content?.news_letter?.status">
+    <app-newsletter [data]="data?.content?.news_letter!" [style]="'classic'"></app-newsletter>
+  </section>
+  <!-- Newsletter Section End -->
+</div>

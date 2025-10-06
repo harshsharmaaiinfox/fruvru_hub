@@ -1,0 +1,86 @@
+<div class="tab-pane fade show active">
+    <div class="dashboard-home">
+        <div class="title-header">
+            <div class="d-flex align-items-center">
+                <h5>{{ 'Dashboard' | translate }}</h5>
+            </div>
+        </div>
+        <div class="dashboard-user-name">
+            <h6 class="text-content">{{ 'Hello' | translate }}, <b class="text-title">{{ (user$ | async)?.name! | titleCase }}</b></h6>
+         
+        </div>
+
+        <div class="profile-about mt-5">
+            <div class="row g-4">
+                <div class="col-xxl-7">
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-header bg-white border-0 pt-4 pb-0">
+                                    <div class="dashboard-title mb-2">
+                                        <h3 class="m-0">{{ 'Profile Information' | translate }}</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-3">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item px-0 d-flex justify-content-between align-items-start">
+                                            <span class="text-muted">{{ 'Name' | translate }}:</span>
+                                            <span class="fw-semibold">{{ (user$ | async)?.name | titleCase }}</span>
+                                        </li>
+                                        <li class="list-group-item px-0 d-flex justify-content-between align-items-start">
+                                            <span class="text-muted">{{ 'Phone' | translate }}:</span>
+                                            <span class="fw-semibold">{{ (user$ | async)?.country_code }} {{ (user$ | async)?.phone }}</span>
+                                        </li>
+                                        <li class="list-group-item px-0 d-flex justify-content-between align-items-start" *ngIf="address">
+                                            <span class="text-muted">{{ 'Address' | translate }}:</span>
+                                            <span class="fw-semibold text-end">
+                                                {{ address.street }}<br>
+                                                {{ address.city }}, {{ address.area }}, {{ address.country_id }} {{ address.pincode }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-header bg-white border-0 pt-4 pb-0">
+                                    <div class="dashboard-title mb-2">
+                                        <h3 class="m-0">{{ 'Login Details' | translate }}</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-3">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="text-muted me-2">{{ 'Email' | translate }}:</span>
+                                                <span class="fw-semibold">{{ (user$ | async)?.email }}</span>
+                                            </div>
+                                            <a class="btn btn-sm btn-outline-primary" href="javascript:void(0)" (click)="ProfileModal.openModal()">{{ 'Edit' | translate }}</a>
+                                        </li>
+                                        <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="text-muted me-2">{{ 'Password' | translate }}:</span>
+                                                <span class="fw-semibold">●●●●●●</span>
+                                            </div>
+                                            <a class="btn btn-sm btn-outline-primary" href="javascript:void(0)" (click)="PasswordModal.openModal()">{{ 'Edit' | translate }}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-5">
+                    <div class="profile-image text-center">
+                        <img src="assets/images/Account-amico.png" class="img-fluid" alt="account-illustration">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-edit-profile-modal #profileModal></app-edit-profile-modal>
+<app-change-password-modal #passwordModal></app-change-password-modal>

@@ -1,0 +1,13 @@
+.dashboard-left-sidebar {
+  padding-right: 8px;
+}
+
+.dashboard-right-sidebar {
+  padding-left: 8px;
+}
+
+@media (max-width: 991.98px) {
+  .dashboard-left-sidebar { padding-right: 0; }
+  .dashboard-right-sidebar { padding-left: 0; }
+}
+

@@ -1,0 +1,95 @@
+.card-section {
+	.row {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	.object-cover {
+		object-fit: cover;
+	}
+}
+
+.fashion-highlights-section {
+	background: #fff;
+	.lead {
+		font-size: 1.05rem;
+		color: #555;
+	}
+	.highlight-card {
+		border: 1px solid #eee;
+		border-radius: 10px;
+		background: #fff;
+	}
+	.highlight-icon {
+		font-size: 26px;
+		color: #111;
+	}
+}
+
+/* Instant Saree Section */
+.instant-saree-section {
+	background: #fdf1ea; /* soft peach-beige like the screenshot */
+	padding-top: 36px;
+	padding-bottom: 36px;
+	.instant-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+	}
+
+	.instant-grid-left {
+		grid-column: 1 / 2;
+		height: 100%;
+	}
+
+	.instant-grid-right {
+		grid-column: 2 / 3;
+		display: grid;
+		grid-template-rows: 1fr 1fr;
+		gap: 16px;
+	}
+
+	.instant-right-top {
+		height: 100%;
+	}
+
+	.instant-right-bottom {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+	}
+
+	.display-title {
+		font-weight: 700;
+		letter-spacing: 2px;
+		font-size: 40px;
+	}
+
+	.eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-size: 14px;
+		margin-bottom: 8px;
+	}
+
+	.tm {
+		font-size: 0.5em;
+		vertical-align: super;
+	}
+
+	/* Ensure media crops to fill boxes */
+	.object-cover {
+		object-fit: cover;
+	}
+
+	.instant-copy .btn {
+		font-weight: 700;
+		font-size: 12px;
+		border-radius: 4px;
+	}
+
+	.instant-copy p.small {
+		margin-top: 12px;
+	}
+}
+

@@ -1,0 +1,248 @@
+import { Injectable, NgZone } from '@angular/core';
+import { Select } from '@ngxs/store';
+import { Observable, filter } from 'rxjs';
+import { ThemeOptionState } from '../state/theme-option.state';
+import { Meta, Title } from '@angular/platform-browser';
+import { ProductState } from '../state/product.state';
+import { NavigationEnd, Router } from '@angular/router';
+import { BlogState } from '../state/blog.state';
+import { BrandState } from '../state/brand.state';
+import { PageState } from '../state/page.state';
+import { CategoryState } from '../state/category.state';
+import { SettingState } from '../state/setting.state';
+import { Blog } from '../interface/blog.interface';
+import { Option } from '../interface/theme-option.interface';
+import { Product } from '../interface/product.interface';
+import { Brand } from '../interface/brand.interface';
+import { Page } from '../interface/page.interface';
+import { Category } from '../interface/category.interface';
+import { Values } from '../interface/setting.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SeoService {
+
+  @Select(ThemeOptionState.themeOptions) themeOption$: Observable<Option>;
+  @Select(SettingState.setting) setting$: Observable<Values>;
+  @Select(ProductState.selectedProduct) product$: Observable<Product>;
+  @Select(BlogState.selectedBlog) blog$: Observable<Blog>;
+  @Select(BrandState.selectedBrand) brand$: Observable<Brand>;
+  @Select(PageState.selectedPage) page$: Observable<Page>;
+  @Select(CategoryState.selectedCategory) category$: Observable<Category>;
+
+  public path: string;
+  public timeoutId: any;
+  private currentMessageIndex = 0;
+  private messages: string[];
+  private currentMessage: string;
+  private delay = 1000; // Delay between messages in milliseconds
+  public isTabInFocus = true;
+  public product: Product;
+  public blog: Blog;
+  public page: Page;
+  public brand: Brand;
+  public category: Category;
+  public themeOption: Option;
+  public scoContent: any = {};
+  public setting: Values;
+  constructor(private meta: Meta, private router: Router,
+    private titleService: Title,
+    private ngZone: NgZone,) { 
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.path = event.url
+      this.updateSeo(this.path)
+    });
+    
+    this.fetchData();
+    
+    // Set initial SEO immediately
+    setTimeout(() => {
+      this.updateDefaultSeo();
+    }, 100);
+  }
+
+  fetchData() {
+    this.setting$.subscribe(val => this.setting = val);
+    this.product$.subscribe(product => this.product = product);
+    this.blog$.subscribe(blog => this.blog = blog);
+    this.page$.subscribe(page => this.page = page);
+    this.brand$.subscribe(brand => this.brand = brand);
+    this.category$.subscribe(blog => this.category = blog);
+    this.themeOption$.subscribe(option => {
+      this.themeOption = option
+    })
+  }
+  
+  updateSeo(path:string){
+    if (path.includes('product')) {
+      if (this.product) {
+        this.scoContent = {
+          'url': window.location.href,
+          'og_title': this.product.meta_title || this.themeOption?.seo?.meta_title,
+          'og_description': this.product.meta_description || this.themeOption?.seo?.meta_description,
+          'og_image': this.product.product_meta_image?.original_url || this.themeOption?.seo?.og_image?.original_url,
+        };
+      }
+      this.customSCO();
+    }
+    else if(path.includes('blog')) {
+      if(this.blog){
+        this.scoContent = {
+          ...this.scoContent,
+          'url': window.location.href,
+          'og_title': this.blog?.meta_title || this.themeOption?.seo?.meta_title,
+          'og_description': this.blog?.meta_description || this.themeOption?.seo?.meta_description,
+          'og_image': this.blog?.blog_meta_image?.original_url || this.themeOption?.seo?.og_image?.original_url,
+        }
+        this.customSCO();
+      }
+    }
+    else if(path.includes('page')) {
+      if(this.page) {
+        this.scoContent = {
+          ...this.scoContent,
+          'url': window.location.href,
+          'og_title': this.page?.meta_title || this.themeOption?.seo?.meta_title,
+          'og_description': this.page?.meta_description || this.themeOption?.seo?.meta_description,
+          'og_image': this.page?.page_meta_image?.original_url || this.themeOption?.seo?.og_image?.original_url,
+        }
+      }
+      this.customSCO();
+    } else if(path.includes('brand')) {
+      if(this.brand) {
+        this.scoContent = {
+          ...this.scoContent,
+          'url': window.location.href,
+          'og_title': this.brand?.meta_title || this.themeOption?.seo?.meta_title,
+          'og_description': this.brand?.meta_description || this.themeOption?.seo?.meta_description,
+          'og_image': this.brand?.brand_meta_image?.original_url || this.themeOption?.seo?.og_image?.original_url,
+        }
+      }
+      this.customSCO();
+    } else if(path.includes('category')) {
+      if(this.category) {
+        this.scoContent = {
+          ...this.scoContent,
+          'url': window.location.href,
+          'og_title': this.category?.meta_title || this.themeOption?.seo?.meta_title,
+          'og_description': this.category?.meta_description || this.themeOption?.seo?.meta_description,
+          'og_image': this.category?.category_meta_image?.original_url || this.themeOption?.seo?.og_image?.original_url,
+        }
+      }
+      this.customSCO();
+    } 
+    else {
+      this.updateDefaultSeo();
+    }
+  }
+
+  updateDefaultSeo(){
+    // Default SEO values
+    const defaultTitle = "Trendy Men's, Women's, Sports & Streetwear Clothing Online";
+    const defaultDescription = "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at your Cool Fashion at unbeatable prices.";
+    
+    // Use theme options if available, otherwise use defaults
+    const title = this.themeOption?.seo?.meta_title || defaultTitle;
+    const description = this.themeOption?.seo?.meta_description || defaultDescription;
+    const currentUrl = window.location.href;
+ 
+    this.meta.updateTag({ name: 'title', content: title });
+    this.meta.updateTag({ name: 'description', content: description });
+
+    // Update Facebook Meta Tags
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:url', content: currentUrl });
+    this.meta.updateTag({ property: 'og:title', content: title });
+    this.meta.updateTag({ property: 'og:description', content: description });
+    this.meta.updateTag({ property: 'og:image', content: this.scoContent['og_image'] || this.themeOption?.seo?.og_image?.original_url });
+
+    // Update Twitter Meta Tags
+    this.meta.updateTag({ property: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ property: 'twitter:url', content: currentUrl });
+    this.meta.updateTag({ property: 'twitter:title', content: title });
+    this.meta.updateTag({ property: 'twitter:description', content: description });
+    this.meta.updateTag({ property: 'twitter:image', content: this.scoContent['og_image'] || this.themeOption?.seo?.og_image?.original_url });
+
+    if(this.themeOption?.general && this.themeOption?.general?.exit_tagline_enable){
+      document.addEventListener('visibilitychange', () => {
+        this.messages = this.themeOption.general.taglines;
+        this.ngZone.run(() => {
+          this.isTabInFocus = !document.hidden;
+          if (this.isTabInFocus) {
+            clearTimeout(this.timeoutId);
+            return this.titleService.setTitle(this.themeOption?.general?.site_title && this.themeOption?.general?.site_tagline
+              ? `${this.themeOption?.general?.site_title} | ${this.themeOption?.general?.site_tagline}` : '')
+          } else {
+            this.updateMessage();
+          }
+        });
+      });
+      this.scoContent = {
+        ...this.scoContent,
+        'url': window.location.href,
+        'og_title': this.themeOption?.seo?.meta_title || "Trendy Men's, Women's, Sports & Streetwear Clothing Online",
+        'og_description': this.themeOption?.seo?.meta_description || "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at your Cool Fashion at unbeatable prices.",
+        'og_image': this.themeOption?.seo?.og_image?.original_url,
+      }
+      
+      this.customSCO()
+    }else {
+      const siteTitle = this.themeOption?.general?.site_title || "Your Cool Fashion";
+      const siteTagline = this.themeOption?.general?.site_tagline || "Trendy Men's, Women's, Sports & Streetwear Clothing Online";
+      return this.titleService.setTitle(`${siteTitle} | ${siteTagline}`);
+    }
+  }
+ 
+  customSCO(){
+    // Default SEO values as fallback
+    const defaultTitle = "Trendy Men's, Women's, Sports & Streetwear Clothing Online";
+    const defaultDescription = "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at your Cool Fashion at unbeatable prices.";
+    
+    const title = this.scoContent['og_title'] || defaultTitle;
+    const description = this.scoContent['og_description'] || defaultDescription;
+    const currentUrl = this.scoContent['url'] || window.location.href;
+
+    this.titleService.setTitle(title);
+    this.meta.updateTag({ name: 'title', content: title });
+    this.meta.updateTag({ name: 'description', content: description });
+
+    // Update Facebook Meta Tags
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:url', content: currentUrl });
+    this.meta.updateTag({ property: 'og:title', content: title });
+    this.meta.updateTag({ property: 'og:description', content: description });
+    this.meta.updateTag({ property: 'og:image', content: this.scoContent['og_image'] || this.themeOption?.seo?.og_image?.original_url });
+
+    // Update Twitter Meta Tags
+    this.meta.updateTag({ property: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ property: 'twitter:url', content: currentUrl });
+    this.meta.updateTag({ property: 'twitter:title', content: title });
+    this.meta.updateTag({ property: 'twitter:description', content: description });
+    this.meta.updateTag({ property: 'twitter:image', content: this.scoContent['og_image'] || this.themeOption?.seo?.og_image?.original_url });
+  }
+
+  updateMessage() {
+    // Clear the previous timeout
+    clearTimeout(this.timeoutId);
+
+    // Update the current message
+    this.currentMessage = this.messages[this.currentMessageIndex];
+    this.titleService.setTitle(this.currentMessage);
+    // Increment the message index or reset it to 0 if it reaches the end
+    this.currentMessageIndex = (this.currentMessageIndex + 1) % this.messages.length;
+
+    // Set a new timeout to call the function again after the specified delay
+    this.timeoutId = setTimeout(() => {
+      this.updateMessage();
+    }, this.delay);
+  }
+
+  ngOnDestroy() {
+    // Clear the timeout when the component is destroyed
+    clearTimeout(this.timeoutId);
+  }
+
+}

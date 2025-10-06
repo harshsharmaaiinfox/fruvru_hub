@@ -1,0 +1,55 @@
+<div class="contain">
+  <div class="wrapper">
+    <div class="visual">
+      <img src="assets/images/Account-amico.png" alt="Get in touch illustration">
+    </div>
+    <div class="form">
+      <h4>GET IN TOUCH</h4>
+      <h2 class="form-headline">Send us a message</h2>
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <p>
+          <input id="name" class="form-input" type="text" formControlName="name" placeholder="Your Name*">
+          <small class="error-message" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+            Please enter a valid name (letters only)
+          </small>
+        </p>
+        <p>
+          <input id="email" class="form-input" type="email" formControlName="email" placeholder="Your Email*">
+          <small class="error-message" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+            Please enter a valid email address
+          </small>
+        </p>
+        <p class="full-width">
+          <input id="subject" class="form-input" type="text" formControlName="subject" placeholder="Subject *">
+          <small class="error-message" *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched">
+            Subject is required
+          </small>
+        </p>
+        <p class="full-width">
+          <textarea formControlName="message" minlength="20" id="message" cols="30" rows="7" placeholder="Your Message*"></textarea>
+          <small class="error-message" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
+            Message is required and must be at least 20 characters
+          </small>
+        </p>
+        <p class="full-width consent">
+          <input type="checkbox" formControlName="consent" id="checkbox" name="checkbox">
+          <label for="checkbox">Yes, I would like to receive communications by call / email about Company's services.</label>
+        </p>
+        <p class="full-width">
+          <button type="submit" class="submit-btn" [disabled]="!contactForm.valid">Submit</button>
+        </p>
+      </form>
+
+      <div class="contact-details">
+        <ul>
+          <li>
+            <p>Whether you have a question about your order, need help choosing the perfect outfit, or simply want to share your feedback — our team is here to assist you.</p>
+          </li>
+          <li class="address-info"><span class="icon"><i class="ri-map-pin-line" aria-hidden="true"></i></span><span>Plot No. 3-FF, Office No. 21, Third Floor, Main Mathura Road, New Delhi, South East Delhi, Delhi - 110044</span></li>
+          <li class="email-info"><span class="icon"><i class="ri-mail-line" aria-hidden="true"></i></span><span>fruvruhub.info&#64;gmail.com</span></li>
+          <li class="phone"><span class="icon"><i class="ri-phone-line" aria-hidden="true"></i></span><span>9211945045</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

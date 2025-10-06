@@ -1,0 +1,106 @@
+<app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="section-b-space">
+    <div class="container-fluid-lg">
+        <div class="row g-0 align-items-stretch shadow-sm rounded overflow-hidden">
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="h-100 w-100" style="background: url('assets/images/login-main.png') center/cover no-repeat; min-height: 420px;"></div>
+            </div>
+            <div class="col-12 col-lg-7 bg-white">
+                <div class="p-4 p-md-5 h-100 d-flex flex-column justify-content-center">
+                    <div class="mb-3 text-center text-lg-start">
+                        <h3 class="mb-1">{{ 'Welcome To' | translate }} {{ (setting$ | async)?.general?.site_name }}</h3>
+                        <p class="text-muted mb-0">{{ 'Create New Account' | translate }}</p>
+                    </div>
+                    <form class="row g-3 contact" [formGroup]="form" (ngSubmit)="submit()">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="name" class="form-control" id="name" id="name" formControlName="name" placeholder="{{ 'Name' | translate }}" (input)="onNameInput($event)">
+                                    <label for="name">{{ 'Full Name' | translate }}</label>
+                                    <div *ngIf="form.controls['name'].touched && form.controls['name'].errors?.['required']" class="invalid-feedback">{{ 'name_is_required' | translate }}</div>
+                                    <div *ngIf="form.controls['name'].touched && form.controls['name'].errors?.['pattern']" class="invalid-feedback">{{ 'Name can only contain letters and spaces' | translate }}</div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" id="email" id="email" formControlName="email" placeholder="{{ 'Email Address' | translate}}">
+                                    <label for="email">{{ 'Email Address' | translate}}</label>
+                                    <div *ngIf="form.controls['email'].touched && form.controls['email'].errors?.['required']" class="invalid-feedback">{{ 'Email Is Required' | translate }}</div>
+                                    <div *ngIf="form.controls['email'].touched && form.controls['email'].errors?.['email']" class="invalid-feedback">
+                                    {{ 'Invalid Email' | translate }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 phone-field">
+                                <div class="form-floating position-relative">
+                                    <input type="text" class="form-control" id="phone" formControlName="phone" placeholder="{{ 'Phone' | translate }}" maxlength="10" inputmode="numeric" pattern="[0-9]*" (input)="onPhoneInput($event)">
+                                    <label for="phone">{{ 'Phone Number' | translate }}</label>
+                                    <div *ngIf="form.controls['phone'].touched && form.controls['phone'].errors?.['required']" class="invalid-feedback">{{ 'Phone Number Is Required' | translate }}</div>
+                                    <div *ngIf="form.controls['phone'].touched && form.controls['phone'].errors?.['invalid']" class="invalid-feedback">{{ 'Phone Number must be 10 digits.' }}</div>
+                                    <select2 class="custom-select intl-tel-input"
+                                      [data]="codes"
+                                      [templates]="template"
+                                      formControlName="country_code">
+                                      <ng-template #template let-data="data">
+                                        <div class="country">
+                                          <div class="flag-box">
+                                            <div class="iti-flag {{data?.class}}"></div>
+                                          </div>
+                                          <span class="dial-code">{{data.code}}</span>
+                                        </div>
+                                      </ng-template>
+                                    </select2>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="password" formControlName="password" placeholder="{{ 'password' | translate }}">
+                                    <label for="password">{{ 'Password' | translate }}</label>
+                                    <div *ngIf="form.controls['password'].touched && form.controls['password'].errors?.['required']" class="invalid-feedback">{{ 'password_is_required' | translate }}</div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="password_confirmation" formControlName="password_confirmation" placeholder="{{ 'password_confirmation' | translate }}">
+                                    <label for="password_confirmation">{{ 'Password Confirmation' | translate }}</label>
+
+                                    <div *ngIf="form.controls['password_confirmation'].touched && form.controls['password_confirmation'].errors?.['required']; else error" autocomplete="false" class="invalid-feedback">{{ 'confirm_password_is_required' | translate }}</div>
+                                    <ng-template #error>
+                                      <div class="invalid-feedback" *ngIf="passwordMatchError">
+                                          {{ 'confirm Password Does Not Matched' | translate }}
+                                      </div>
+                                  </ng-template>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="forgot-box">
+                                    <div class="form-check ps-0 m-0 remember-box">
+                                        <input class="checkbox_animated check-box" type="checkbox"
+                                            id="flexCheckDefault" [formControl]="tnc">
+                                        <label class="form-check-label" for="flexCheckDefault" [class.text-red]="this.tnc.errors?.['required']">{{ 'I Agree With' | translate }}
+                                            <span>{{ 'Terms' | translate }}</span> {{ 'And' | translate }} <span>{{ 'Privacy' | translate }}</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" *ngIf="reCaptcha">
+                                <re-captcha formControlName="recaptcha"> </re-captcha>
+                                <div *ngIf="form.controls['recaptcha'].touched && form.controls['recaptcha'].errors?.['required']"
+                                    class="invalid-feedback">
+                                    {{ 'ReCaptcha is Required' | translate }}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <app-button [id]="'sign_up_btn'" [class]="'btn btn-animation justify-content-center w-100'" [disabled]="tnc.invalid || form.invalid">{{ 'Sign Up' | translate }}</app-button>
+                            </div>
+                    </form>
+                    <div class="text-center mt-4">
+                        <span class="text-muted">{{ 'OR' | translate }}</span>
+                    </div>
+                    <div class="text-center mt-3">
+                        <span>{{ 'Already Have An Account' | translate }}?</span>
+                        <a [routerLink]="['/auth/login']" class="ms-1">{{ 'Login' | translate }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

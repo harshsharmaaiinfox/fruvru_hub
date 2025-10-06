@@ -1,0 +1,21 @@
+
+
+<!-- Rome Theme -->
+<div class="container-fluid-lg banner-set" *ngIf="theme === 'rome'">
+  <div class="row g-4">
+    <div class="col-xxl-12 banner-home">
+      <a [routerLink]="['/collections']" [queryParams]="{ category: 'women', sortBy: 'asc' }">
+        <picture>
+          <source srcset="../../../../../assets/images/frubru-banner.webp" type="image/webp">
+          <img 
+            src="../../../../../assets/images/frubru-banner.webp" 
+            class="img-fluid" 
+            alt="Women's fashion banner" 
+            loading="eager" 
+            fetchpriority="high"
+          />
+        </picture>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18px 0 8px;
+  h6 { margin: 0; font-weight: 600; font-size: 14px; letter-spacing: .2px; }
+  .divider { flex: 1; height: 1px; background: rgba(0,0,0,.08); margin-left: 12px; }
+}
+
+.user-nav-pills.enhanced {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .nav-item { width: 100%; }
+
+  .nav-link {
+    display: grid;
+    grid-template-columns: 28px 1fr 18px;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.02);
+    color: inherit;
+    transition: background .2s ease, box-shadow .2s ease, transform .05s ease;
+    position: relative;
+    text-decoration: none;
+
+    &:hover { background: rgba(0,0,0,0.05); }
+    &:active { transform: translateY(1px); }
+
+    &.active {
+      background: #f1f7ff;
+      box-shadow: none;
+    }
+
+    .nav-icon { font-size: 18px; display: inline-flex; align-items: center; justify-content: center; }
+    .nav-label { font-size: 14px; font-weight: 500; }
+    .nav-caret { color: rgba(0,0,0,.35); font-size: 18px; justify-self: end; }
+
+    .nav-badge {
+      position: absolute;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ff3b30;
+      color: #fff;
+      height: 20px;
+      min-width: 20px;
+      padding: 0 6px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .logout-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    border-radius: 10px;
+    background: #fff3f3;
+    color: #cc2b2b;
+    padding: 10px 12px;
+    font-weight: 600;
+    border: 1px solid #ffd9d9;
+    transition: background .2s ease;
+  }
+
+  .logout-btn:hover { background: #ffe9e9; }
+}
+
+.profile-box {
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0,0,0,.02);
+}
+

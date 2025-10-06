@@ -1,0 +1,72 @@
+<div class="close-button d-flex d-lg-none">
+    <app-button [class]="'close-sidebar'" [style]="'button'" [id]="'close_sidebar_btn'" [spinner]="false" (click)="openMenu(false)">
+        <i class="ri-close-fill"></i>
+    </app-button>
+</div>
+
+<div class="sidebar-title p-3">
+    <h6>{{ 'My Account' | translate }}</h6>
+    <span class="divider"></span>
+ </div>
+<ul class="nav nav-pills user-nav-pills enhanced" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/account/dashboard']" (click)="openMenu(false)">
+            <span class="nav-icon"><i class="ri-home-line"></i></span>
+            <span class="nav-label">{{ 'Dashboard' | translate }}</span>
+            <i class="ri-arrow-right-s-line nav-caret"></i>
+        </a>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/account/notifications']" (click)="openMenu(false)">
+            <span class="nav-icon"><i class="ri-notification-line"></i></span>
+            <span class="nav-label">{{ 'Notifications' | translate }}</span>
+            <span class="nav-badge" *ngIf="unreadNotificationCount">{{ unreadNotificationCount }}</span>
+            <i class="ri-arrow-right-s-line nav-caret"></i>
+        </a>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/account/bank-details']" (click)="openMenu(false)">
+            <span class="nav-icon"><i class="ri-bank-line"></i></span>
+            <span class="nav-label">{{ 'Bank Details' | translate }}</span>
+            <i class="ri-arrow-right-s-line nav-caret"></i>
+        </a>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/account/order']" (click)="openMenu(false)">
+            <span class="nav-icon"><i class="ri-file-text-line"></i></span>
+            <span class="nav-label">{{ 'My Orders' | translate }}</span>
+            <i class="ri-arrow-right-s-line nav-caret"></i>
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/account/downloads']" (click)="openMenu(false)">
+            <span class="nav-icon"><i class="ri-download-2-line"></i></span>
+            <span class="nav-label">{{ 'Downloads' | translate }}</span>
+            <i class="ri-arrow-right-s-line nav-caret"></i>
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/account/refund']" (click)="openMenu(false)">
+            <span class="nav-icon"><i class="ri-money-rupee-circle-line"></i></span>
+            <span class="nav-label">{{ 'Refund History' | translate }}</span>
+            <i class="ri-arrow-right-s-line nav-caret"></i>
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/account/addresses']" (click)="openMenu(false)">
+            <span class="nav-icon"><i class="ri-map-pin-line"></i></span>
+            <span class="nav-label">{{ 'Saved Address' | translate }}</span>
+            <i class="ri-arrow-right-s-line nav-caret"></i>
+        </a>
+    </li>
+    <li class="nav-item logout-cls" role="presentation">
+        <a href="javascript:void(0)" class="btn logout-btn" (click)="confirmationModal.openModal()">
+            <i class="ri-logout-circle-r-line"></i>
+            <span>{{ 'Logout' | translate }}</span>
+        </a>
+    </li>
+</ul>
+<app-confirmation-modal #confirmationModal (confirmed)="logout()"></app-confirmation-modal>
