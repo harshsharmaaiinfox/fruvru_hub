@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/fastkart-frontend-rest/browser"
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)\\.(js|css|png|jpg|jpeg|svg|ico|txt|xml|webp|gif|woff|woff2|ttf|map)", "dest": "/$1.$2" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
+
+
