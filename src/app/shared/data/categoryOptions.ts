@@ -5,7 +5,7 @@ export const ThemeCategoryOptions = {
     {
         "id": 66,
         "name": "Menswear",
-        "slug": "Menswear",
+        "slug": "Men",
         "meta_title": null,
         "meta_description": null,
         "category_meta_image_id": null,
@@ -50,7 +50,7 @@ export const ThemeCategoryOptions = {
     {
         "id": 68,
         "name": "Womenswear",
-        "slug": "Womenswear",
+        "slug": "Women",
         "meta_title": null,
         "meta_description": null,
         "category_meta_image_id": null,
@@ -96,7 +96,7 @@ export const ThemeCategoryOptions = {
       {
           "id": 60,
           "name": "Active Life",
-          "slug": "Active Life",
+          "slug": "Activewear",
           "meta_title": null,
           "meta_description": null,
           "category_meta_image_id": null,
