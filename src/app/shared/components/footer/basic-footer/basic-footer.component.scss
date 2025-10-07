@@ -41,7 +41,7 @@
       display: flex;
       gap: 12px;
       align-items: flex-end;
-      flex-wrap: wrap;
+      flex-wrap: nowrap; // keep input + button on one row on larger screens
 
       .form-group {
         margin-bottom: 20px;
@@ -81,6 +81,25 @@
             border-color: #ff5252;
           }
         }
+
+        // Input with inline submit button
+        .input-with-button {
+          position: relative;
+
+          input {
+            padding-right: 140px; // space for the button
+          }
+
+          .inline-btn {
+            position: absolute;
+            top: 50%;
+            right: 6px;
+            transform: translateY(-50%);
+            margin: 0;
+            height: calc(100% - 12px);
+            padding: 0 18px;
+          }
+        }
       }
 
       .subscribe-btn {
@@ -96,7 +115,8 @@
         border-radius: 4px;
         cursor: pointer;
         transition: all 0.3s ease;
-        margin-bottom: 20px;
+        margin-bottom: 0; // align with input when in a single row
+        flex: 0 0 auto; // prevent button from stretching
 
         &:hover:not(:disabled) {
           background-color: #fff;

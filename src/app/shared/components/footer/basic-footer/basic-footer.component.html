@@ -13,13 +13,18 @@
                         <form class="newsletter-form" [formGroup]="subscribeForm" (ngSubmit)="onSubscribe()">
                             <div class="form-group">
                                 <label for="email">EMAIL ADDRESS*</label>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    formControlName="email"
-                                    placeholder="Enter Your Email Address"
-                                    [class.is-invalid]="submitted && emailControl?.invalid"
-                                >
+                                <div class="input-with-button">
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        formControlName="email"
+                                        placeholder="Enter Your Email Address"
+                                        [class.is-invalid]="submitted && emailControl?.invalid"
+                                    >
+                                    <button type="submit" class="subscribe-btn inline-btn" [disabled]="submitted">
+                                        {{ submitted ? 'Loading...' : 'SUBSCRIBE NOW' }}
+                                    </button>
+                                </div>
                                 <div class="error-message" *ngIf="submitted && emailControl?.invalid && emailControl?.touched">
                                     <span *ngIf="emailControl?.errors?.['required']">Email is required</span>
                                     <span *ngIf="emailControl?.errors?.['pattern']">Please enter a valid email</span>
@@ -29,12 +34,6 @@
                                     Thank you for subscribing!
                                 </div>
                             </div>
-                            
-                            <button type="submit" class="subscribe-btn" [disabled]="submitted">
-                                {{ submitted ? 'SIGNING UP...' : 'SIGN UP' }}
-                            </button>
-                            
-                            
                         </form>
                     </div>
                 </div>

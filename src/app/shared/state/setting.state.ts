@@ -80,24 +80,24 @@ export class SettingState {
               },
               {
                 name: 'starpaisa_insider_fino',
-                status: true,
+                status: false,
                 title: 'Pay By UPI INTENT',
                
               },
               {
                 name: 'sbm_insider',
-                status: true,
+                status: false,
                 title: 'Pay By UPI INTENT(SBM)'
               },
                {
                 name: 'insider_cashfree',
-                status: true,
+                status: false,
                 title: 'cash Free',
                 icon: './assets/images/cash_free.jpg',
               },
                
             ];
-             customValue.general.site_name = "Your Cool Fashion"
+             customValue.general.site_name = "Fruvru Hub"
             customValue.payment_methods = customPayments //[result.values.payment_methods[0]];
           }
           ctx.patchState({
