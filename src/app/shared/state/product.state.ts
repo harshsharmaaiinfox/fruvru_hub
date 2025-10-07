@@ -93,7 +93,7 @@ export class ProductState {
   @Action(GetProducts)
   getProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
     this.productService.skeletonLoader = true;
-    if (action.payload) { action.payload['store_id'] = 24 }
+    if (action.payload) { action.payload['store_id'] = 26 }
     return this.productService.getProducts(action.payload).pipe(
       tap({
         next: (result: ProductModel) => {
@@ -117,7 +117,7 @@ export class ProductState {
   @Action(GetRelatedProducts)
   getRelatedProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
     this.themeOptionService.preloader = true;
-    if (action.payload) { action.payload['store_id'] = 24 }
+    if (action.payload) { action.payload['store_id'] = 26 }
     return this.productService.getProducts(action.payload).pipe(
       tap({
         next: (result: ProductModel) => {
@@ -140,7 +140,7 @@ export class ProductState {
 @Action(GetCategoryProducts)
 getCategoryProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
   if (action.payload) {
-    action.payload['store_id'] = 24;
+    action.payload['store_id'] = 26;
     action.payload['price'] = '290-950';
     action.payload['sortBy'] = 'price'; // Sort by price
   }
@@ -171,7 +171,7 @@ getCategoryProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
 
   @Action(GetStoreProducts)
   getStoreProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
-    if (action.payload) { action.payload['store_id'] = 24 }
+    if (action.payload) { action.payload['store_id'] = 26 }
     return this.productService.getProducts(action.payload).pipe(
       tap({
         next: (result: ProductModel) => {
@@ -220,7 +220,7 @@ getCategoryProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
 
   @Action(GetDealProducts)
   getDealProducts(ctx: StateContext<ProductStateModel>, action: GetDealProducts) {
-    if (action.payload) { action.payload['store_id'] = 24 }
+    if (action.payload) { action.payload['store_id'] = 26 }
     return this.productService.getProducts(action.payload).pipe(
       tap({
         next: (result: ProductModel) => {
@@ -239,7 +239,7 @@ getCategoryProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
 
   @Action(GetMenuProducts)
   getMenuProducts(ctx: StateContext<ProductStateModel>, action: GetMenuProducts) {
-    if (action.payload) { action.payload['store_id'] = 24 }
+    if (action.payload) { action.payload['store_id'] = 26 }
     return this.productService.getProducts(action.payload).pipe(
       tap({
         next: (result: ProductModel) => {
@@ -258,7 +258,7 @@ getCategoryProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
 
   @Action(GetProductBySearch)
   getProductBySearch(ctx: StateContext<ProductStateModel>, action: GetProductBySearch) {
-    if (action.payload) { action.payload['store_id'] = 24 }
+    if (action.payload) { action.payload['store_id'] = 26 }
     this.productService.searchSkeleton = true;
     return this.productService.getProductBySearch(action.payload).pipe(
       tap({
@@ -279,7 +279,7 @@ getCategoryProducts(ctx: StateContext<ProductStateModel>, action: GetProducts) {
 
   @Action(GetProductByIds)
   getProductByIds(ctx: StateContext<ProductStateModel>, action: GetProductByIds) {
-    if (action.payload) { action.payload['store_id'] = 24 }
+    if (action.payload) { action.payload['store_id'] = 26 }
     return this.productService.getProducts(action.payload).pipe(
       tap({
         next: (result: ProductModel) => {
