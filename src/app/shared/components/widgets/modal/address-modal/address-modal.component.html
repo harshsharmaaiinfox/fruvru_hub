@@ -75,18 +75,18 @@
           <div>
             <label class="form-label" for="pincode">{{ 'Pincode' | translate }}</label>
             <input class="form-control" id="pincode" type="text" maxlength="6" placeholder="{{ 'Enter Pincode' | translate }}"
-              formControlName="pincode" numbersOnly minlength="6" />
+              formControlName="pincode" minlength="6" (input)="onPincodeInput($event)" />
             <div class="invalid-feedback"
-              *ngIf="
-                  form?.controls?.['pincode']?.touched && 
-                  (
-                    form.controls['pincode']?.errors?.['required'] ||
-                    form.controls['pincode']?.errors?.['minlength'] ||
-                    form.controls['pincode']?.errors?.['numbersOnly']
-                  )
-                "
-                >
-              {{ 'Pincode is invalid' | translate }}
+              *ngIf="form?.controls?.['pincode']?.touched && form.controls['pincode']?.errors?.['required']">
+              {{ 'Pincode is required' | translate }}
+            </div>
+            <div class="invalid-feedback"
+              *ngIf="form?.controls?.['pincode']?.touched && form.controls['pincode']?.errors?.['minlength']">
+              {{ 'Pincode must be at least 6 digits' | translate }}
+            </div>
+            <div class="invalid-feedback"
+              *ngIf="form?.controls?.['pincode']?.touched && form.controls['pincode']?.errors?.['pattern']">
+              {{ 'Pincode can only contain numbers' | translate }}
             </div>
           </div>
         </div>

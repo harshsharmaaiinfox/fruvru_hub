@@ -98,6 +98,7 @@ import { SearchDropdownComponent } from './components/header/widgets/search/sear
 
 // Directives
 import { ClickOutsideDirective } from './directive/out-side-directive';
+import { NumbersOnlyDirective } from './directive/numbers-only.directive';
 
 // Pipes
 import { TitleCasePipe } from './pipe/title-case.pipe';
@@ -152,6 +153,7 @@ import { SearchFilterPipe } from './pipe/search-filter.pipe';
     ChangePasswordModalComponent,
     EditProfileModalComponent,
     ClickOutsideDirective,
+    NumbersOnlyDirective,
     TitleComponent,
     PaginationComponent,
     CategoriesComponent,
@@ -222,6 +224,7 @@ import { SearchFilterPipe } from './pipe/search-filter.pipe';
     AlertComponent,
     ButtonComponent,
     ClickOutsideDirective,
+    NumbersOnlyDirective,
     TitleComponent,
     PaginationComponent,
     NgbModule,

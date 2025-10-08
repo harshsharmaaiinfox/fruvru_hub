@@ -63,7 +63,7 @@ export class AddressModalComponent {
       country_id: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       area: new FormControl('', [Validators.required]),
-      pincode: new FormControl('', [Validators.required]),
+      pincode: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]*$/), Validators.minLength(6)]),
       country_code: new FormControl('91', [Validators.required]),
       phone: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]*$/)])
     })
@@ -88,6 +88,24 @@ export class AddressModalComponent {
           this.form.controls['phone'].setErrors({ invalid: true });
         } else {
           this.form.controls['phone'].setErrors(null);
+        }
+      }
+    });
+
+    // Pincode validation - only allow numbers and limit to 6 digits
+    this.form.controls['pincode']?.valueChanges.subscribe((value) => {
+      if (value) {
+        // Remove any non-numeric characters
+        let pincodeStr = value.toString().replace(/[^0-9]/g, '');
+        
+        // Limit to 6 digits for Indian pincodes
+        if (pincodeStr.length > 6) {
+          pincodeStr = pincodeStr.slice(0, 6);
+        }
+        
+        // Only update if the value actually changed (to avoid infinite loops)
+        if (pincodeStr !== value.toString()) {
+          this.form.controls['pincode'].setValue(pincodeStr, { emitEvent: false });
         }
       }
     });
@@ -313,6 +331,22 @@ export class AddressModalComponent {
     if (value !== cleanValue) {
       input.value = cleanValue;
       this.form.controls['phone'].setValue(cleanValue);
+    }
+  }
+
+  onPincodeInput(event: any) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any non-numeric characters
+    const cleanValue = value.replace(/[^0-9]/g, '');
+    
+    // Limit to 6 digits
+    const limitedValue = cleanValue.slice(0, 6);
+    
+    // Update the input value if it was changed
+    if (value !== limitedValue) {
+      input.value = limitedValue;
+      this.form.controls['pincode'].setValue(limitedValue);
     }
   }
 
