@@ -1,6 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Params } from '../../../../../../shared/interface/core.interface';
+import { CategoryState } from '../../../../../../shared/state/category.state';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { Category, CategoryModel } from '../../../../../../shared/interface/category.interface';
 
 @Component({
   selector: 'app-collection-filter',
@@ -10,7 +14,9 @@ import { Params } from '../../../../../../shared/interface/core.interface';
 export class CollectionFilterComponent implements OnChanges {
 
   @Input() filter: Params;
+  @Select(CategoryState.category) category$: Observable<CategoryModel>;
   public filters: string[];
+  public categories: Category[];
 
   public filtersObj: { [key: string]: string[] } = {
     category: [],
@@ -22,7 +28,9 @@ export class CollectionFilterComponent implements OnChanges {
   };
 
   constructor(private route: ActivatedRoute,
-    private router: Router) {}
+    private router: Router) {
+    this.category$.subscribe(res => this.categories = res.data.filter(category => category.type == 'product'));
+  }
 
   ngOnChanges() {
     this.filtersObj = {
@@ -42,6 +50,11 @@ export class CollectionFilterComponent implements OnChanges {
       this.filtersObj[key] = this.filtersObj[key].filter((val: string) => {
         if (key === 'rating') {
           return val !== tag.replace(/^rating /, '');
+        }
+        if (key === 'category') {
+          // Convert category name back to slug for comparison
+          const categorySlug = this.getCategorySlug(tag);
+          return val !== categorySlug;
         }
         return val !== tag;
       });
@@ -76,12 +89,22 @@ export class CollectionFilterComponent implements OnChanges {
 
   private mergeFilters(): string[] {
     return [
-      ...this.filtersObj['category'],
+      ...this.filtersObj['category'].map(slug => this.getCategoryName(slug)),
       ...this.filtersObj['brand'],
       ...this.filtersObj['tag'],
       ...this.filtersObj['rating'].map(val => val.startsWith('rating ') ? val : `rating ${val}`),
       ...this.filtersObj['price'],
       ...this.filtersObj['attribute']
     ];
+  }
+
+  private getCategoryName(slug: string): string {
+    const category = this.categories?.find(cat => cat.slug === slug);
+    return category ? category.name : slug;
+  }
+
+  private getCategorySlug(name: string): string {
+    const category = this.categories?.find(cat => cat.name === name);
+    return category ? category.slug : name;
   }
 }
