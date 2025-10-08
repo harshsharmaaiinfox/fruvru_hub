@@ -8,27 +8,27 @@
       <h2 class="form-headline">Send us a message</h2>
       <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
         <p>
-          <input id="name" class="form-input" type="text" formControlName="name" placeholder="Your Name*">
-          <small class="error-message" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
-            Please enter a valid name (letters only)
+          <input id="name" class="form-input" type="text" formControlName="name" placeholder="Your Name*" (input)="onNameInput($event)" maxlength="50">
+          <small class="error-message" *ngIf="isFieldInvalid('name')">
+            {{ getErrorMessage('name') }}
           </small>
         </p>
         <p>
-          <input id="email" class="form-input" type="email" formControlName="email" placeholder="Your Email*">
-          <small class="error-message" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
-            Please enter a valid email address
+          <input id="email" class="form-input" type="email" formControlName="email" placeholder="Your Email*" maxlength="100">
+          <small class="error-message" *ngIf="isFieldInvalid('email')">
+            {{ getErrorMessage('email') }}
           </small>
         </p>
         <p class="full-width">
-          <input id="subject" class="form-input" type="text" formControlName="subject" placeholder="Subject *">
-          <small class="error-message" *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched">
-            Subject is required
+          <input id="subject" class="form-input" type="text" formControlName="subject" placeholder="Subject *" (input)="onSubjectInput($event)" maxlength="100">
+          <small class="error-message" *ngIf="isFieldInvalid('subject')">
+            {{ getErrorMessage('subject') }}
           </small>
         </p>
         <p class="full-width">
-          <textarea formControlName="message" minlength="20" id="message" cols="30" rows="7" placeholder="Your Message*"></textarea>
-          <small class="error-message" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
-            Message is required and must be at least 20 characters
+          <textarea formControlName="message" minlength="20" maxlength="1000" id="message" cols="30" rows="7" placeholder="Your Message*" (input)="onMessageInput($event)"></textarea>
+          <small class="error-message" *ngIf="isFieldInvalid('message')">
+            {{ getErrorMessage('message') }}
           </small>
         </p>
         <p class="full-width consent">
