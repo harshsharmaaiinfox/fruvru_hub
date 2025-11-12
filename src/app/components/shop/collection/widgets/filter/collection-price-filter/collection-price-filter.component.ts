@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Params } from '../../../../../../shared/interface/core.interface';
 
@@ -7,7 +7,7 @@ import { Params } from '../../../../../../shared/interface/core.interface';
   templateUrl: './collection-price-filter.component.html',
   styleUrls: ['./collection-price-filter.component.scss']
 })
-export class CollectionPriceFilterComponent {
+export class CollectionPriceFilterComponent implements OnChanges {
 
   @Input() filter: Params;
 
@@ -62,22 +62,44 @@ export class CollectionPriceFilterComponent {
     private router: Router) {
   }
 
-  ngOnChanges() {
-    this.selectedPrices = this.filter['price'] ? this.filter['price'].split(',') : [];
+  ngOnChanges(changes: SimpleChanges) {
+    // Normalize incoming query param `price` which can be a string (comma separated)
+    // or an array of strings when using repeated query params.
+    const priceParam = this.filter?.['price'];
+
+    if (Array.isArray(priceParam)) {
+      this.selectedPrices = priceParam.slice();
+    } else if (typeof priceParam === 'string' && priceParam.length) {
+      this.selectedPrices = priceParam.split(',');
+    } else {
+      this.selectedPrices = [];
+    }
+
+    // ensure uniqueness
+    this.selectedPrices = Array.from(new Set(this.selectedPrices));
   }
 
   applyFilter(event: Event) {
-    const index = this.selectedPrices.indexOf((<HTMLInputElement>event?.target)?.value);  // checked and unchecked value
+    const target = (event?.target) as HTMLInputElement;
+    if (!target) return;
 
-    if ((<HTMLInputElement>event?.target)?.checked)
-      this.selectedPrices.push((<HTMLInputElement>event?.target)?.value); // push in array cheked value
-    else
-      this.selectedPrices.splice(index,1);  // removed in array unchecked value
+    const value = target.value;
+    const checked = !!target.checked;
+    const index = this.selectedPrices.indexOf(value);
 
+    if (checked) {
+      // add only if not present
+      if (index === -1) this.selectedPrices.push(value);
+    } else {
+      // remove if present
+      if (index !== -1) this.selectedPrices.splice(index, 1);
+    }
+
+    // navigate with array so Angular emits repeated query params like ?price=200&price=400
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        price: this.selectedPrices.length ? this.selectedPrices?.join(",") : null,
+        price: this.selectedPrices.length ? this.selectedPrices : null,
         page: 1
       },
       queryParamsHandling: 'merge', // preserve the existing query params in the route
@@ -87,10 +109,7 @@ export class CollectionPriceFilterComponent {
 
   // check if the item are selected
   checked(item: string){
-    if(this.selectedPrices?.indexOf(item) != -1){
-      return true;
-    }
-    return false;
+    return this.selectedPrices?.indexOf(item) !== -1;
   }
 
 }

@@ -84,7 +84,12 @@ export class CollectionFilterComponent implements OnChanges {
   }
 
   private splitFilter(filterKey: keyof Params): string[] {
-    return this.filter && this.filter[filterKey] ? this.filter[filterKey].split(',') : [];
+    const value = this.filter && this.filter[filterKey];
+    if (!value) return [];
+    // value can be a comma-separated string or an array (repeated query params)
+    if (Array.isArray(value)) return value.slice();
+    if (typeof value === 'string') return value.length ? value.split(',') : [];
+    return [];
   }
 
   private mergeFilters(): string[] {
