@@ -1,18 +1,42 @@
 
-<ul class="category-list custom-padding custom-height">
-    <li *ngFor="let price of prices">
-        <div class="form-check ps-0 m-0 category-list-box">
-            <input class="checkbox_animated" type="checkbox" 
-                id="price-filter{{price?.id}}"
-                [value]="price?.value"
-                [checked]="checked(price?.value!)"
-                (change)="applyFilter($event)">
-            <label class="form-check-label" for="price-filter{{price?.id}}">
-                <span class="name" *ngIf="price?.price else minMaxPrice">{{ price?.text }} {{ price?.price | currencySymbol }}</span>
-                <ng-template #minMaxPrice>
-                    <span class="name">{{ price?.minPrice | currencySymbol }} - {{ price?.maxPrice | currencySymbol }}</span>
-                </ng-template>
-            </label>
-        </div>
-    </li>
-</ul>
+<div class="price-slider">
+  <div class="slider-values">
+    <span>{{ minValue | currencySymbol }}</span>
+    <span>{{ maxValue | currencySymbol }}</span>
+  </div>
+
+  <div class="range-slider">
+    <div class="slider-track" [style.background]="sliderBackground"></div>
+
+    <input
+      type="range"
+      class="range-input"
+      [min]="minLimit"
+      [max]="maxLimit"
+      [step]="1"
+      [value]="minValue"
+      (input)="onMinInput($event)"
+      (change)="onRangeCommit()"
+    >
+
+    <input
+      type="range"
+      class="range-input"
+      [min]="minLimit"
+      [max]="maxLimit"
+      [step]="1"
+      [value]="maxValue"
+      (input)="onMaxInput($event)"
+      (change)="onRangeCommit()"
+    >
+  </div>
+
+  <button
+    type="button"
+    class="btn btn-link btn-sm px-0"
+    (click)="clearRange()"
+    *ngIf="hasActiveRange()"
+  >
+    {{ 'clear' | translate }}
+  </button>
+</div>

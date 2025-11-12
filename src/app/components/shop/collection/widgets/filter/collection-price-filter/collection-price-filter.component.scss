@@ -1,0 +1,99 @@
+.price-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .slider-values {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    color: var(--theme-font-color, #222);
+  }
+
+  .range-slider {
+    position: relative;
+    height: 24px;
+  }
+
+  .slider-track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    transform: translateY(-50%);
+    background: var(--slider-track-color, #e9ecef);
+  }
+
+  .range-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .range-input::-webkit-slider-thumb {
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--theme-default, #0d6efd);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  .range-input::-moz-range-thumb {
+    pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--theme-default, #0d6efd);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  .range-input::-ms-thumb {
+    pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--theme-default, #0d6efd);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  .range-input::-webkit-slider-runnable-track {
+    height: 4px;
+    background: transparent;
+  }
+
+  .range-input::-moz-range-track {
+    height: 4px;
+    background: transparent;
+  }
+
+  .range-input::-ms-track {
+    height: 4px;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+
+  .btn-link {
+    align-self: flex-end;
+  }
+}
+
