@@ -2,7 +2,7 @@
 <div class="price-slider">
   <div class="slider-values">
     <span>{{ minValue | currencySymbol }}</span>
-    <span>{{ maxValue | currencySymbol }}</span>
+    <span>{{ maxValue === maxLimit ? 'Max' : (maxValue | currencySymbol) }}</span>
   </div>
 
   <div class="range-slider">

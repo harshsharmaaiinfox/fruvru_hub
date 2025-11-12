@@ -18,17 +18,21 @@ export class CollectionPriceFilterComponent implements OnChanges {
     { min: 400, max: 600, value: '400-600' },
     { min: 600, max: 800, value: '600-800' },
     { min: 800, max: 1000, value: '800-1000' },
-    { min: 1000, max: 1000, value: '1000' }
+    { min: 1000, max: 1500, value: '1000-1500' },
+    { min: 1500, max: 2000, value: '1500-2000' },
+    { min: 2000, max: 3000, value: '2000-3000' },
+    { min: 3000, max: 4000, value: '3000-4000' },
+    { min: 4000, max: 5000, value: '4000-5000' },
+    { min: 5000, max: 7500, value: '5000-7500' },
+    { min: 7500, max: 10000, value: '7500-10000' },
+    { min: 10000, max: 10000, value: '10000' }
   ] as const;
 
-  private readonly allowedValues: number[] = Array.from(
-    new Set(
-      this.presetRanges.flatMap((range) => [range.min, range.max])
-    )
-  ).sort((a, b) => a - b);
+  private readonly sliderMin = 0;
+  private readonly sliderMax = 10000;
 
-  public minLimit = this.allowedValues[0];
-  public maxLimit = this.allowedValues[this.allowedValues.length - 1];
+  public readonly minLimit = this.sliderMin;
+  public readonly maxLimit = this.sliderMax;
 
   public minValue = this.minLimit;
   public maxValue = this.maxLimit;
@@ -171,15 +175,7 @@ export class CollectionPriceFilterComponent implements OnChanges {
 
   private clamp(value: number): number {
     const bounded = Math.min(this.maxLimit, Math.max(this.minLimit, value));
-    return this.snapToAllowed(bounded);
-  }
-
-  private snapToAllowed(value: number): number {
-    return this.allowedValues.reduce((closest, current) => {
-      const currentDiff = Math.abs(current - value);
-      const closestDiff = Math.abs(closest - value);
-      return currentDiff < closestDiff ? current : closest;
-    }, this.allowedValues[0]);
+    return Math.round(bounded);
   }
 
   private isFullRange(min: number, max: number): boolean {
