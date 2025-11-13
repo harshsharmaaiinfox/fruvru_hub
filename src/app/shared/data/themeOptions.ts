@@ -100,7 +100,7 @@ export const themeOptionsfruvruhub = {
             "copyright_content": "Copyright 2025 © FRUVRU HUB ",
             "footer_about": null,
             "about_address": "Plot No. 3-FF, Office No. 21, Third Floor, Main Mathura Road, New Delhi, South East Delhi, Delhi - 110044",
-            "about_email": "fruvruhub.info@gmail.com",
+            "about_email": "support@fruhub.info",
             "footer_categories": [],
             "useful_link": [
                 {
@@ -132,7 +132,7 @@ export const themeOptionsfruvruhub = {
                 }
             ],
             "support_number": "+91 9211945045",
-            "support_email": " fruvruhub.info@gmail.com",
+            "support_email": " support@fruhub.info",
             "play_store_url": null,
             "app_store_url": null,
             "social_media_enable": null,
