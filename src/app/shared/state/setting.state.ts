@@ -98,7 +98,7 @@ export class SettingState {
               {
                 name: 'fruhub_cashfree',
                 status: true,
-                title: 'Cash Free',
+                title: 'Fruhub Cash Free',
                 icon: './assets/images/cash_free.jpg',
               },
                
