@@ -348,5 +348,30 @@ export class CartService {
   checkTransectionStatusNeoInsider(uuid: any, payment_method: string) {
     return this.http.post<any>(`${environment.URL}/check-payment-response`,{ uuid: uuid, payment_method});
   }
+
+  // Fruhub CashFree Payment Integration
+  initiateFruhubCashFreeIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/fruhub-cashfree-initiate-payment`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  checkTransectionStatusFruhubCashFree(uuid: any, payment_method: string) {
+    return this.http.post<any>(`${environment.URL}/check-payment-response`,{ uuid: uuid, payment_method});
+  }
 }
 
