@@ -71,6 +71,27 @@ export class CheckoutSuccessComponent {
       .subscribe(params => {
         this.order_status = params['order_status'];
         console.log(this.order_status);
+        
+        // Handle fruhub_cashfree payment return
+        const paymentMethod = sessionStorage.getItem('payment_method');
+        if (paymentMethod === 'fruhub_cashfree') {
+          const orderId = localStorage.getItem('order_id');
+          if (orderId) {
+            const orderNumber = JSON.parse(orderId);
+            const userData = localStorage.getItem('account');
+            const parsedUserData = JSON.parse(userData || '{}')?.user || {};
+            const isGuest = !parsedUserData || !parsedUserData.id;
+            
+            // Check payment status
+            const uuid = sessionStorage.getItem('payment_uuid');
+            if (uuid) {
+              this.checkFruhubCashFreePaymentStatus(uuid, orderNumber, isGuest);
+            } else {
+              // Redirect to order details
+              this.redirectToOrderDetails(orderNumber, isGuest);
+            }
+          }
+        }
       });
     
   }
@@ -180,6 +201,40 @@ export class CheckoutSuccessComponent {
   handlePaymentSuccess(response: any) {
     console.log('Payment was successful:', response);
     alert('Payment Successful! Redirecting...');
+  }
+
+  checkFruhubCashFreePaymentStatus(uuid: string, orderNumber: string, isGuest: boolean) {
+    this.cartService.checkTransectionStatusFruhubCashFree(uuid, 'fruhub_cashfree').subscribe({
+      next: (response) => {
+        console.log('Payment Status Response:', response);
+        // Clear session storage
+        sessionStorage.removeItem('payment_uuid');
+        sessionStorage.removeItem('payment_method');
+        sessionStorage.removeItem('payment_action');
+        
+        // Redirect to order details
+        this.redirectToOrderDetails(orderNumber, isGuest);
+      },
+      error: (err) => {
+        console.error('Error checking payment status:', err);
+        // Still redirect to order details even if check fails
+        this.redirectToOrderDetails(orderNumber, isGuest);
+      }
+    });
+  }
+
+  redirectToOrderDetails(orderNumber: string, isGuest: boolean) {
+    const userData = localStorage.getItem('account');
+    const parsedUserData = JSON.parse(userData || '{}')?.user || {};
+    
+    if (!isGuest) {
+      this.router.navigateByUrl(`/account/order/details/${orderNumber}`);
+      setTimeout(() => { window.location.reload() }, 1000);
+    } else {
+      const email = parsedUserData.email || '';
+      this.router.navigate([ 'order/details' ], { queryParams: { order_number: orderNumber, email_or_phone: email } });
+      setTimeout(() => { window.location.reload() }, 1000);
+    }
   }
 
   async checkPaymentResponse() {

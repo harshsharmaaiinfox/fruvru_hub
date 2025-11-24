@@ -916,7 +916,10 @@ export class CheckoutComponent {
       checkout: this.storeData?.order?.checkout
     };
 
-    // Store order result for later use
+    // Store payment info in session storage for redirect back
+    sessionStorage.setItem('payment_uuid', uuid);
+    sessionStorage.setItem('payment_method', payment_method);
+    sessionStorage.setItem('payment_action', JSON.stringify(this.form.value));
     localStorage.setItem('order_id', JSON.stringify(order_result.order_number));
 
     this.cartService.initiateFruhubCashFreeIntent({
@@ -933,131 +936,28 @@ export class CheckoutComponent {
             const fruhubCashFreeData = response.data;
             
             if (fruhubCashFreeData?.payment_url || fruhubCashFreeData?.payment_link) {
-              // Open the payment page in a new tab/window
-              const paymentWindow = window.open(
-                fruhubCashFreeData.payment_url || fruhubCashFreeData.payment_link, 
-                'PaymentWindow', 
-                'width=600,height=700,left=100,top=100,resizable=yes,scrollbars=yes'
-              );
-
-              if (!paymentWindow) {
-                console.error("Popup blocked. Please allow pop-ups for this site.");
-              } else {
-                // Start polling for payment status - pass order_result to avoid placing order again
-                this.checkTransactionStatusFruhubCashFree(uuid, order_result, paymentWindow, payment_method);
-              }
+              // Redirect to payment page in the same tab
+              window.location.href = fruhubCashFreeData.payment_url || fruhubCashFreeData.payment_link;
             } else {
               console.error("Invalid response: Payment link is missing.");
+              this.notificationService.showError("Payment initiation failed. Please try again.");
             }
           } catch (error) {
             console.error("Error parsing Fruhub CashFree response:", error);
+            this.notificationService.showError("Payment response error. Please try again.");
           }
         } else {
           console.error("Payment initiation failed:", response?.msg);
+          this.notificationService.showError(response?.msg || "Payment initiation failed. Please try again.");
         }
       },
       error: (err) => {
         console.log("Error initiating payment:", err);
+        this.notificationService.showError("Error initiating payment. Please try again.");
       }
     });
   }
 
-  checkTransactionStatusFruhubCashFree(uuid: any, order_result: any, paymentWindow: Window | null, payment_method: string) {
-    if (!paymentWindow) return;
-
-    let windowClosedManually = false;
-
-    // ✅ Start monitoring the payment window's URL and check if it's closed
-    const urlCheckInterval = setInterval(() => {
-        try {
-            if (paymentWindow.closed) {
-                console.log("Payment window closed manually or due to an issue.");
-                clearInterval(urlCheckInterval);
-                windowClosedManually = true;
-
-                // ✅ If closed manually, redirect to order details (order already placed)
-                this.handleFruhubCashFreePaymentSuccess({ status: false, reason: "Window closed manually" }, order_result);
-                return;
-            }
-
-            const currentUrl = paymentWindow.location.href;
-            console.log("Current Payment Window URL:", currentUrl);
-
-            // ✅ Check if redirected to success or failure page
-            if (currentUrl.includes("success") || currentUrl.includes("failure")) {
-                console.log("Redirect detected, closing window.");
-                clearInterval(urlCheckInterval);
-                paymentWindow.close();
-
-                // ✅ Process the response
-                this.handleFruhubCashFreePaymentSuccess({ status: true, url: currentUrl }, order_result);
-            }
-        } catch (error) {
-            // Catches CORS-related issues if the domain changes
-            console.warn("Unable to access payment window URL (possible CORS issue).");
-        }
-    }, 1000); // Check every second
-
-    // ✅ Continue polling for payment status
-    this.pollingSubscription = interval(this.pollingInterval)
-      .pipe(
-          switchMap(() => this.cartService.checkTransectionStatusFruhubCashFree(uuid, payment_method)),
-          map(response => ({
-              ...response,
-              status: response.status || false
-          })),
-          delay(9999999999999), // Wait before forcing status update
-          map(response => ({
-              ...response,
-              status: true // Force status to true after 60s if still false
-          })),
-          takeWhile((response: { status: boolean }) => !response.status, true)
-      )
-      .subscribe({
-          next: (response) => {
-              console.log('Payment Status:', response);
-
-              if (response.status) {
-                  this.pollingSubscription.unsubscribe(); // Stop polling
-
-                  // ✅ Close the popup window if still open
-                  if (paymentWindow && !paymentWindow.closed) {
-                      paymentWindow.close();
-                      console.log("Payment popup closed automatically.");
-                  }
-
-                  this.handleFruhubCashFreePaymentSuccess(response, order_result);
-              }
-          },
-          error: (err) => {
-              console.error('Error checking payment status:', err);
-          },
-          complete: () => {
-              if (windowClosedManually) {
-                  console.log("Polling stopped: Payment window was closed manually.");
-              }
-          }
-      });
-  }
-
-  handleFruhubCashFreePaymentSuccess(response: any, order_result: any) {
-    console.log('Payment was successful:', response);
-    console.log('Order already placed, redirecting to order details:', order_result);
-    
-    // Order is already placed, just redirect to order details
-    const userData = localStorage.getItem('account');
-    const parsedUserData = JSON.parse(userData || '{}')?.user || {};
-    const isGuest = !parsedUserData || !parsedUserData.id;
-
-    if (!isGuest) {
-      this.router.navigateByUrl(`/account/order/details/${order_result.order_number}`);
-      setTimeout(() => { window.location.reload() }, 1000);
-    } else {
-      const email = this.form.value.email || parsedUserData.email;
-      this.router.navigate([ 'order/details' ], { queryParams: { order_number: order_result.order_number, email_or_phone: email } });
-      setTimeout(() => { window.location.reload() }, 1000);
-    }
-  }
 
   async checkTransectionStatusCashFree(uuid: any,payment_method: string) {
     this.cartService.checkTransectionStatusCashFree(uuid, payment_method).subscribe({
