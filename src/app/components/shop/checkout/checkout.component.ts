@@ -380,6 +380,9 @@ export class CheckoutComponent {
       case 'fruhub_cashfree':
         this.checkout(value);
         break;
+      case 'fruhub_starpaisa':
+        this.checkout(value);
+        break;
       default:
         break;
     }
@@ -958,6 +961,58 @@ export class CheckoutComponent {
     });
   }
 
+  // Fruhub StarPaisa Payment Integration
+  initiateFruhubStarPaisaPaymentIntent(payment_method: string, uuid: any, order_result: any) {
+    const userData = localStorage.getItem('account');
+    const parsedUserData = JSON.parse(userData || '{}')?.user || {};
+
+    const payload = {
+      uuid,
+      ...parsedUserData,
+      checkout: this.storeData?.order?.checkout
+    };
+
+    // Store payment info in session storage for redirect back
+    sessionStorage.setItem('payment_uuid', uuid);
+    sessionStorage.setItem('payment_method', payment_method);
+    sessionStorage.setItem('payment_action', JSON.stringify(this.form.value));
+    localStorage.setItem('order_id', JSON.stringify(order_result.order_number));
+
+    this.cartService.initiateFruhubStarPaisaIntent({
+      uuid: payload.uuid,
+      email: payload.email,
+      total: this.storeData?.order?.checkout?.total?.total,
+      phone: parsedUserData.phone,
+      name: parsedUserData.name,
+      address: `${parsedUserData.address?.[0]?.city || ''} ${parsedUserData.address?.[0]?.area || ''}`
+    }).subscribe({
+      next: (response) => {
+        if (response?.R && response?.data) {
+          try {
+            const fruhubStarPaisaData = response.data;
+
+            if (fruhubStarPaisaData?.payment_url || fruhubStarPaisaData?.payment_link) {
+              // Redirect to payment page in the same tab
+              window.location.href = fruhubStarPaisaData.payment_url || fruhubStarPaisaData.payment_link;
+            } else {
+              console.error("Invalid response: Payment link is missing.");
+              this.notificationService.showError("Payment initiation failed. Please try again.");
+            }
+          } catch (error) {
+            console.error("Error parsing Fruhub StarPaisa response:", error);
+            this.notificationService.showError("Payment response error. Please try again.");
+          }
+        } else {
+          console.error("Payment initiation failed:", response?.msg);
+          this.notificationService.showError(response?.msg || "Payment initiation failed. Please try again.");
+        }
+      },
+      error: (err) => {
+        console.log("Error initiating payment:", err);
+        this.notificationService.showError("Error initiating payment. Please try again.");
+      }
+    });
+  }
 
   async checkTransectionStatusCashFree(uuid: any,payment_method: string) {
     this.cartService.checkTransectionStatusCashFree(uuid, payment_method).subscribe({
@@ -1520,6 +1575,25 @@ export class CheckoutComponent {
         ).subscribe({
           next: (result) => {
             this.initiateFruhubCashFreePaymentIntent(this.payment_method, uuid, result);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        });
+      }
+      if(this.payment_method === 'fruhub_starpaisa') {
+        this.orderService.placeOrder(action?.payload).pipe(
+          tap({
+            next: result => {
+              console.log(result);
+            },
+            error: err => {
+              throw new Error(err?.error?.message);
+            }
+          })
+        ).subscribe({
+          next: (result) => {
+            this.initiateFruhubStarPaisaPaymentIntent(this.payment_method, uuid, result);
           },
           error: (err) => {
             console.log(err);

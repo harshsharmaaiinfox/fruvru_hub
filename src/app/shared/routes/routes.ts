@@ -7,7 +7,7 @@ export const content: Routes = [
     {
         path: "",
         loadChildren: () => import("../../components/themes/themes.module").then((m) => m.ThemesModule),
-        title: 'Home | Your Cool Fashion'
+        title: 'Home | Fruvrubhu'
     },
     {
         path: 'privacy-policy',
@@ -15,7 +15,7 @@ export const content: Routes = [
             import('../../privacy-policy/privacy-policy.module').then(
                 (m) => m.PrivacyPolicyModule
             ),
-        title: 'Privacy Policy | Your Cool Fashion'
+        title: 'Privacy Policy | Fruvrubhu'
     },
 
     {
@@ -24,7 +24,7 @@ export const content: Routes = [
             import('../../return-exchange/return-exchange.module').then(
                 (m) => m.ReturnExchangeModule
             ),
-        title: 'Return & Exchange Policy | Your Cool Fashion'
+        title: 'Return & Exchange Policy | Fruvrubhu'
     },
 
     {
@@ -33,7 +33,7 @@ export const content: Routes = [
             import('../../term-condition/term-condition.module').then(
                 (m) => m.TermConditionModule
             ),
-        title: 'Terms & Conditions | Your Cool Fashion'
+        title: 'Terms & Conditions | Fruvrubhu'
     },
 
     {
@@ -42,58 +42,58 @@ export const content: Routes = [
             import('../../refund-and-cancellation-policy/refund-and-cancellation-policy.module').then(
                 (m) => m.RefundAndCancellationPolicyModule
             ),
-        title: 'Refund & Cancellation Policy | Your Cool Fashion'
+        title: 'Refund & Cancellation Policy | Fruvrubhu'
     },
 
     {
         path: "shipping-delivery",
         loadChildren: () => import("../../shipping-delevary/shipping-delevary.module").then((m) => m.ShippingDelevaryModule),
-        title: 'Shipping & Delivery | Your Cool Fashion'
+        title: 'Shipping & Delivery | Fruvrubhu'
     },
 
     {
         path: "aboutus",
         loadChildren: () => import("../../about-us/about-us.module").then((m) => m.AboutUsModule),
-        title: 'About Us | Your Cool Fashion'
+        title: 'About Us | Fruvrubhu'
     },
 
     {
         path: "Contact-Us",
         loadChildren: () => import("../../contact-us/contact-us.module").then((m) => m.ContactUsModule),
-        title: 'Contact Us | Your Cool Fashion'
+        title: 'Contact Us | Fruvrubhu'
     },
 
     {
         path: "auth",
         loadChildren: () => import("../../components/auth/auth.module").then((m) => m.AuthModule),
         canActivateChild: [AuthGuard],
-        title: 'Login / Register | Your Cool Fashion'
+        title: 'Login / Register | Fruvrubhu'
     },
     {
         path: "account",
         loadChildren: () => import("../../components/account/account.module").then((m) => m.AccountModule),
         canActivate: [AuthGuard],
-        title: 'My Account | Your Cool Fashion'
+        title: 'My Account | Fruvrubhu'
     },
     {
         path: "",
         loadChildren: () => import("../../components/shop/shop.module").then((m) => m.ShopModule),
-        title: 'Shop | Your Cool Fashion'
+        title: 'Shop | Fruvrubhu'
     },
     {
         path: "",
         loadChildren: () => import("../../components/blog/blog.module").then((m) => m.BlogModule),
-        title: 'Blog | Your Cool Fashion'
+        title: 'Blog | Fruvrubhu'
     },
     {
         path: "",
         loadChildren: () => import("../../components/page/page.module").then((m) => m.PagesModule),
-        title: 'Pages | Your Cool Fashion'
+        title: 'Pages | Fruvrubhu'
     },
     {
         path: '**',
         pathMatch: 'full',
         component: Error404Component,
-        title: '404 - Page Not Found | Your Cool Fashion'
+        title: '404 - Page Not Found | Fruvrubhu'
     }
 ]

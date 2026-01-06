@@ -101,6 +101,12 @@ export class SettingState {
                 title: 'Fruhub Cash Free',
                 icon: './assets/images/cash_free.jpg',
               },
+              {
+                name: 'fruhub_starpaisa',
+                status: true,
+                title: 'Fruhub Star Paisa',
+                icon: './assets/images/starpaisa.png',
+              },
                
             ];
              customValue.general.site_name = "Fruvru Hub"

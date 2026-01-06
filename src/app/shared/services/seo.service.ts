@@ -142,7 +142,7 @@ export class SeoService {
   updateDefaultSeo(){
     // Default SEO values
     const defaultTitle = "Trendy Men's, Women's, Sports & Streetwear Clothing Online";
-    const defaultDescription = "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at your Cool Fashion at unbeatable prices.";
+    const defaultDescription = "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at Fruvrubhu at unbeatable prices.";
     
     // Use theme options if available, otherwise use defaults
     const title = this.themeOption?.seo?.meta_title || defaultTitle;
@@ -184,13 +184,13 @@ export class SeoService {
         ...this.scoContent,
         'url': window.location.href,
         'og_title': this.themeOption?.seo?.meta_title || "Trendy Men's, Women's, Sports & Streetwear Clothing Online",
-        'og_description': this.themeOption?.seo?.meta_description || "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at your Cool Fashion at unbeatable prices.",
+        'og_description': this.themeOption?.seo?.meta_description || "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at Fruvrubhu at unbeatable prices.",
         'og_image': this.themeOption?.seo?.og_image?.original_url,
       }
       
       this.customSCO()
     }else {
-      const siteTitle = this.themeOption?.general?.site_title || "Your Cool Fashion";
+      const siteTitle = this.themeOption?.general?.site_title || "Fruvrubhu";
       const siteTagline = this.themeOption?.general?.site_tagline || "Trendy Men's, Women's, Sports & Streetwear Clothing Online";
       return this.titleService.setTitle(`${siteTitle} | ${siteTagline}`);
     }
@@ -199,7 +199,7 @@ export class SeoService {
   customSCO(){
     // Default SEO values as fallback
     const defaultTitle = "Trendy Men's, Women's, Sports & Streetwear Clothing Online";
-    const defaultDescription = "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at your Cool Fashion at unbeatable prices.";
+    const defaultDescription = "Discover Stylish men's, women's, sports, and streetwear clothing. Shop the latest fashion online at Fruvrubhu at unbeatable prices.";
     
     const title = this.scoContent['og_title'] || defaultTitle;
     const description = this.scoContent['og_description'] || defaultDescription;
