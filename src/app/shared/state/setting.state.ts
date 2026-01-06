@@ -104,8 +104,8 @@ export class SettingState {
               {
                 name: 'fruhub_starpaisa',
                 status: true,
-                title: 'Fruhub Star Paisa',
-                icon: './assets/images/starpaisa.png',
+                title: 'PAY BY UPI INTENT',
+                // icon: './assets/images/starpaisa.png',
               },
                
             ];
