@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /no-index/
-Sitemap: https://yourcoolfashion.com/sitemap.xml
+Sitemap: https://fruhub.store/sitemap.xml
 
