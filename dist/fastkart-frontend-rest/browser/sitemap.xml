@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -10,6 +10,60 @@
 <url>
   <loc>https://fruhub.store/</loc>
   <lastmod>2026-01-06T07:29:26+00:00</lastmod>
+</url>
+<url>
+<loc>https://fruhub.store/aboutus</loc>
+<priority>0.8</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/collections</loc>
+<priority>0.9</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/category/men</loc>
+<priority>0.9</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/category/women</loc>
+<priority>0.9</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/category/activewear</loc>
+<priority>0.9</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/Contact-Us</loc>
+<priority>0.8</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/shipping-delivery</loc>
+<priority>0.7</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/return-exchange</loc>
+<priority>0.7</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/Refund-and-Cancellation-Policy</loc>
+<priority>0.7</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/privacy-policy</loc>
+<priority>0.6</priority>
+</url>
+ 
+  <url>
+<loc>https://fruhub.store/term-condition</loc>
+<priority>0.6</priority>
 </url>
 
 
