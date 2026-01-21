@@ -28,8 +28,8 @@ export class CollectionPriceFilterComponent implements OnChanges {
     { min: 10000, max: 10000, value: '10000' }
   ] as const;
 
-  private readonly sliderMin = 0;
-  private readonly sliderMax = 10000;
+  private readonly sliderMin = 300;
+  private readonly sliderMax = 15000;
 
   public readonly minLimit = this.sliderMin;
   public readonly maxLimit = this.sliderMax;
