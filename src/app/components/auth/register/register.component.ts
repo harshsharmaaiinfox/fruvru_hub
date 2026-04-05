@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { CustomValidators } from '../../../shared/validator/password-match';
 import { Register } from '../../../shared/action/auth.action';
 import { Breadcrumb } from '../../../shared/interface/breadcrumb';
@@ -12,13 +13,17 @@ import { Option } from '../../../shared/interface/theme-option.interface';
 import { Values } from '../../../shared/interface/setting.interface';
 import * as data from '../../../shared/data/country-code';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { GetCartItems, SyncCart } from '../../../shared/action/cart.action';
+import { CartState } from '../../../shared/state/cart.state';
+import { CartAddOrUpdate } from '../../../shared/interface/cart.interface';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
   @Select(SettingState.setting) setting$: Observable<Values>;
   @Select(ThemeOptionState.themeOptions) themeOption$: Observable<Option>;
@@ -30,7 +35,7 @@ export class RegisterComponent {
   }
   public codes = data.countryCodes;
   public tnc = new FormControl(false, [Validators.requiredTrue]);
-
+  public returnUrl: string = '/';
 
   public reCaptcha: boolean = true;
   
@@ -38,8 +43,10 @@ export class RegisterComponent {
   constructor(
     private store: Store,
     private router: Router,
+    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService
   ) {
     this.form = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
@@ -78,6 +85,50 @@ export class RegisterComponent {
       }
     });
 
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.pipe(take(1)).subscribe(params => {
+      const patch: Record<string, string> = {};
+      if (params['name']) patch['name'] = params['name'];
+      if (params['email']) patch['email'] = params['email'];
+      if (params['phone']) patch['phone'] = params['phone'];
+      if (params['country_code']) patch['country_code'] = params['country_code'];
+      if (Object.keys(patch).length) {
+        this.form.patchValue(patch);
+      }
+      // Store returnUrl from query param (set by checkout when redirecting to register)
+      if (params['returnUrl']) {
+        this.returnUrl = params['returnUrl'];
+      }
+    });
+  }
+
+  private afterRegisterSuccess(): void {
+    const items = this.store.selectSnapshot(CartState.cartItems);
+    const syncCartItems: CartAddOrUpdate[] = [];
+    items.forEach(item => {
+      if (item) {
+        syncCartItems.push({
+          id: null,
+          product: item?.product,
+          product_id: item?.product_id,
+          variation: item?.variation ? item.variation : null,
+          variation_id: item?.variation_id ? item.variation_id : null,
+          quantity: item.quantity
+        });
+      }
+    });
+    const go = () => {
+      const redirectUrl = this.authService.redirectUrl || this.returnUrl || '/';
+      this.router.navigateByUrl(redirectUrl);
+      this.authService.redirectUrl = undefined;
+    };
+    if (syncCartItems.length) {
+      this.store.dispatch(new SyncCart(syncCartItems)).subscribe({ complete: () => go() });
+    } else {
+      this.store.dispatch(new GetCartItems()).subscribe({ complete: () => go() });
+    }
   }
 
   onNameInput(event: any) {
@@ -119,12 +170,12 @@ export class RegisterComponent {
       return
     }
     if(this.form.valid) {
-      this.store.dispatch(new Register(this.form.value)).subscribe({
-          complete: () => {
-            this.router.navigateByUrl('/');
-          }
+      const payload = this.form.getRawValue();
+      this.store.dispatch(new Register(payload)).subscribe({
+        complete: () => {
+          this.afterRegisterSuccess();
         }
-      );
+      });
     }
   }
 }

@@ -10,9 +10,11 @@ import { AccountState } from '../../../shared/state/account.state';
 import { CartState } from '../../../shared/state/cart.state';
 import { OrderState } from '../../../shared/state/order.state';
 import { Checkout, PlaceOrder } from '../../../shared/action/order.action';
-import { ClearCart } from '../../../shared/action/cart.action';
+import { ClearCart, GetCartItems, SyncCart } from '../../../shared/action/cart.action';
 import { AddressModalComponent } from '../../../shared/components/widgets/modal/address-modal/address-modal.component';
-import { Cart } from '../../../shared/interface/cart.interface';
+import { Cart, CartAddOrUpdate } from '../../../shared/interface/cart.interface';
+import { Register } from '../../../shared/action/auth.action';
+import { GetUserDetails } from '../../../shared/action/account.action';
 import { SettingState } from '../../../shared/state/setting.state';
 import { GetSettingOption } from '../../../shared/action/setting.action';
 import { OrderCheckout } from '../../../shared/interface/order.interface';
@@ -29,6 +31,7 @@ import { delay, switchMap, takeWhile, tap } from 'rxjs/operators';
 import { OrderService } from '../../../shared/services/order.service';
 import { v4 as uuidv4 } from 'uuid';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { AuthService } from '../../../shared/services/auth.service';
 // import { PaymentInitModal } from 'pg-test-project';
 // import * as React from 'react';
 
@@ -47,6 +50,7 @@ export class CheckoutComponent {
   @Select(AccountState.user) user$: Observable<AccountUser>;
   @Select(AuthState.accessToken) accessToken$: Observable<string>;
   @Select(CartState.cartItems) cartItem$: Observable<Cart[]>;
+  @Select(CartState.cartTotal) cartTotal$: Observable<number>;
   @Select(OrderState.checkout) checkout$: Observable<OrderCheckout>;
   @Select(SettingState.setting) setting$: Observable<Values>;
   @Select(CartState.cartHasDigital) cartDigital$: Observable<boolean | number>;
@@ -95,7 +99,8 @@ export class CheckoutComponent {
         private modalService: NgbModal,
         private sanitizer: DomSanitizer,
         private orderService: OrderService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private authService: AuthService
       ) {
     this.store.dispatch(new GetSettingOption());
 
@@ -238,7 +243,7 @@ export class CheckoutComponent {
       }
     });
     
-    this.localUserCheck = JSON.parse(localStorage.getItem('account') || '');
+    this.localUserCheck = JSON.parse(localStorage.getItem('account') || '{}');
     
   }
 
@@ -315,6 +320,97 @@ export class CheckoutComponent {
   ngOnInit() {
     this.checkout$.subscribe(data => this.checkoutTotal = data);
     this.products();
+    // Load user profile when logged in so delivery/payment sections render correctly
+    const accessToken = this.store.selectSnapshot(state => state.auth?.access_token);
+    if (accessToken) {
+      this.store.dispatch(new GetUserDetails());
+      this.store.dispatch(new GetCartItems()).subscribe({ complete: () => this.checkout() });
+    }
+  }
+
+  /** Guest: go to login, then return to checkout with cart preserved (see login/register cart sync). */
+  goToLoginFromCheckout(): void {
+    this.authService.redirectUrl = '/checkout';
+    this.router.navigate(['/auth/login']);
+  }
+
+  /** Guest: register directly from checkout without navigating away. After success stays on /checkout as logged-in user with cart preserved. */
+  registerDirectlyFromCheckout(): void {
+    // If password field is not yet visible, enable create_account to show it and prompt
+    if (!this.form.get('create_account')?.value) {
+      this.form.get('create_account')?.setValue(true);
+      this.notificationService.showSuccess('Please enter a password to complete registration.');
+      return;
+    }
+
+    const name = this.form.get('name')?.value;
+    const email = this.form.get('email')?.value;
+    const phone = this.form.get('phone')?.value;
+    const country_code = this.form.get('country_code')?.value ?? '91';
+    const password = this.form.get('password')?.value;
+
+    if (!name || !email || !phone || !password) {
+      this.form.markAllAsTouched();
+      this.notificationService.showError('Please fill in all required fields including password.');
+      return;
+    }
+
+    this.loading = true;
+    const payload = {
+      name: String(name).trim(),
+      email: String(email).trim(),
+      phone: Number(String(phone).replace(/\D/g, '').slice(0, 10)),
+      country_code: Number(country_code ?? 91),
+      password,
+      password_confirmation: password,
+    };
+
+    this.store.dispatch(new Register(payload)).subscribe({
+      complete: () => {
+        // Load user profile immediately so checkout page renders delivery/payment correctly
+        this.store.dispatch(new GetUserDetails());
+        const items = this.store.selectSnapshot(CartState.cartItems);
+        const syncCartItems: CartAddOrUpdate[] = items
+          .filter(item => !!item)
+          .map(item => ({
+            id: null,
+            product: item?.product,
+            product_id: item?.product_id,
+            variation: item?.variation ? item.variation : null,
+            variation_id: item?.variation_id ? item.variation_id : null,
+            quantity: item.quantity,
+          }));
+
+        if (syncCartItems.length) {
+          this.store.dispatch(new SyncCart(syncCartItems)).subscribe({
+            complete: () => window.location.href = '/checkout'
+          });
+        } else {
+          this.store.dispatch(new GetCartItems()).subscribe({
+            complete: () => window.location.href = '/checkout'
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Registration Error Details:', err);
+        this.loading = false;
+        
+        let errorMessage = 'Registration failed. Please check your details and try again.';
+        if (err.error && err.error.errors) {
+          // Extract the first validation error if available
+          const firstErrorKey = Object.keys(err.error.errors)[0];
+          if (firstErrorKey && err.error.errors[firstErrorKey].length > 0) {
+            errorMessage = err.error.errors[firstErrorKey][0];
+          }
+        } else if (err.error && err.error.message) {
+          errorMessage = err.error.message;
+        } else if (err.message) {
+          errorMessage = err.message;
+        }
+
+        this.notificationService.showError(errorMessage);
+      }
+    });
   }
 
   products() {
@@ -384,6 +480,8 @@ export class CheckoutComponent {
         this.checkout(value);
         break;
       default:
+        // For any other payment method, always call checkout API to get pricing
+        this.checkout(value);
         break;
     }
   }
@@ -1632,8 +1730,6 @@ export class CheckoutComponent {
   }
 
   ngOnDestroy() {
-    // this.store.dispatch(new Clear());
-    this.store.dispatch(new ClearCart());
     this.form.reset();
     this.pollingSubscription && this.pollingSubscription.unsubscribe();
   }

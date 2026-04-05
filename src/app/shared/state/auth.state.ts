@@ -203,6 +203,7 @@ export class AuthState {
       tap({
         next: result => {
           this.store.dispatch(new AuthClear());
+          this.store.dispatch(new ClearCart());
         },
         complete: () => {
           this.modalService.dismissAll();
@@ -224,7 +225,6 @@ export class AuthState {
     });
     this.authService.redirectUrl = undefined;
     this.store.dispatch(new AccountClear());
-    this.store.dispatch(new ClearCart());
   }
 
 }
